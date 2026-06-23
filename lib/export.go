@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"github.com/aliffatulmf/buku-tamu-apbj/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
 	"fmt"
 	"os"
 	"path/filepath"
