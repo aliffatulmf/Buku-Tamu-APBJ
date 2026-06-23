@@ -1,20 +1,24 @@
-# Guest Book
+# Buku Tamu APBJ
 
-## Server
-1. Buka "Buku Tamu Server.exe", lalu pilih "Yes".
-2. Install dan tunggu sampai selesai.
-3. Centang "Server", "Database", dan "Service", lalu pilih "Finish".
-4. Jika muncul pemberitahuan pilih "Yes" atau "OK"
-5. Selesai.
+Aplikasi Buku Tamu digital untuk pengelolaan data tamu Pemerintah Daerah (Pemda) dan Penyedia Barang/Jasa.
 
-⚠️ Lokasi berada di C:\Buku Tamu Server, Export XLSX berada di C:\Buku Tamu Server\Documents
+## Tentang
 
-## Admin
-1. Buka "Buku Tamu Server.exe", centang "Create a desktop shortcut", klik "Next".
-2. Pilih "Install"
-3. Selesai.
+Buku Tamu APBJ adalah sistem pencatatan kunjungan yang membantu instansi pemerintah mengelola data tamu, termasuk pemerintah daerah dan penyedia barang/jasa. Aplikasi ini menyediakan fitur registrasi, pencatatan kunjungan, serta export data ke format Excel.
 
-## Client
-1. Buka "Buku Tamu Client.exe", centang "Create a desktop shortcut", klik "Next".
-2. Pilih "Install"
-3. Selesai.
+## Fitur Utama
+
+- **Registrasi Pemda** — Pendaftaran data pemerintah daerah dengan foto identitas
+- **Registrasi Penyedia** — Pendaftaran data penyedia barang/jasa
+- **Dashboard** — Ringkasan data kunjungan
+- **Export XLSX** — Export data ke file Excel berdasarkan rentang tanggal
+- **Manajemen Instansi & Pokja** — Pengelolaan data instansi dan pokja kerja
+
+## Akses
+
+| Halaman        | URL                   |
+| -------------- | --------------------- |
+| Dashboard      | `/`                   |
+| Login Pemda    | `/pemda/terdaftar`    |
+| Login Penyedia | `/penyedia/terdaftar` |
+| Credits        | `/credits`            |
