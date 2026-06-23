@@ -2,20 +2,20 @@
 -- MySQL
 
 CREATE TABLE IF NOT EXISTS destinations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     destination_name VARCHAR(255) NOT NULL UNIQUE,
-    created_at DATETIME DEFAULT NULL,
-    updated_at DATETIME DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
     INDEX idx_deleted_at (deleted_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS consultations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     consultation_name VARCHAR(255) NOT NULL UNIQUE,
-    destination_id INT DEFAULT NULL,
-    created_at DATETIME DEFAULT NULL,
-    updated_at DATETIME DEFAULT NULL,
+    destination_id VARCHAR(36) DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
     INDEX idx_destination_id (destination_id),
     INDEX idx_deleted_at (deleted_at),
@@ -23,14 +23,15 @@ CREATE TABLE IF NOT EXISTS consultations (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS pokjas (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id VARCHAR(36) PRIMARY KEY,
     pokja_name VARCHAR(255) NOT NULL UNIQUE,
     status TINYINT(1) DEFAULT 1,
-    destination_id INT DEFAULT NULL,
-    created_at DATETIME DEFAULT NULL,
-    updated_at DATETIME DEFAULT NULL,
+    destination_id VARCHAR(36) DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
     INDEX idx_destination_id (destination_id),
+    INDEX idx_status (status),
     INDEX idx_deleted_at (deleted_at),
     FOREIGN KEY (destination_id) REFERENCES destinations(id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -40,8 +41,8 @@ CREATE TABLE IF NOT EXISTS agencies (
     agency_name VARCHAR(255) NOT NULL UNIQUE,
     agency_email VARCHAR(255) DEFAULT NULL,
     agency_telephone VARCHAR(50) DEFAULT NULL,
-    created_at DATETIME DEFAULT NULL,
-    updated_at DATETIME DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
     INDEX idx_deleted_at (deleted_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -57,10 +58,12 @@ CREATE TABLE IF NOT EXISTS pemdas (
     pokja VARCHAR(255) DEFAULT NULL,
     image VARCHAR(255) NOT NULL,
     verified TINYINT(1) NOT NULL DEFAULT 0,
-    created_at DATETIME DEFAULT NULL,
-    updated_at DATETIME DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
     INDEX idx_agency_id (agency_id),
+    INDEX idx_destination (destination),
+    INDEX idx_verified (verified),
     INDEX idx_deleted_at (deleted_at),
     FOREIGN KEY (agency_id) REFERENCES agencies(id) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -76,8 +79,10 @@ CREATE TABLE IF NOT EXISTS providers (
     pokja VARCHAR(255) DEFAULT NULL,
     image VARCHAR(255) NOT NULL,
     verified TINYINT(1) NOT NULL DEFAULT 0,
-    created_at DATETIME DEFAULT NULL,
-    updated_at DATETIME DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
+    INDEX idx_destination (destination),
+    INDEX idx_verified (verified),
     INDEX idx_deleted_at (deleted_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -11,10 +11,13 @@ import (
 
 	"github.com/aliffatulmf/buku-tamu-apbj/app"
 	"github.com/aliffatulmf/buku-tamu-apbj/database"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/handler"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/io"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/service"
-	"github.com/aliffatulmf/buku-tamu-apbj/middleware"
+
+	// "github.com/aliffatulmf/buku-tamu-apbj/middleware"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -34,10 +37,9 @@ var (
 )
 
 var (
-	AppName  = "Buku Tamu"
-	Version  = "1.0"
-	Protocol = "HTTPS"
-	Port     = "6170"
+	AppName = "Buku Tamu"
+	Version = "2.0"
+	Port    = "6170"
 )
 
 var run string
@@ -53,14 +55,14 @@ func init() {
 		}
 	}
 
-	flag.StringVar(&run, "run", "tls", "run service using TLS or HTTP\nOption: [\"tls\", \"http\"]")
+	flag.StringVar(&run, "run", "http", "run service using HTTP")
 	flag.Parse()
 
 	switch run {
-	case "tls":
+	case "release":
 		gin.SetMode(gin.ReleaseMode)
 		Server = gin.New()
-	case "http":
+	default:
 		gin.SetMode(gin.DebugMode)
 		Server = gin.Default()
 	}
@@ -98,13 +100,24 @@ func init() {
 			Logger: logger.Default.LogMode(logger.Error),
 		})
 
+		DB.AutoMigrate(
+			&entity.Destination{},
+			&entity.Consultation{},
+			&entity.Pokja{},
+			&entity.Agency{},
+			&entity.Pemda{},
+			&entity.Provider{},
+		)
+
+		database.Seed(DB)
+
 	default:
 		fmt.Println("ERROR: status mode not available.")
 		os.Exit(1)
 	}
 
 	Server.Static("/media", "media/")
-	Server.Use(middleware.WebviewMiddleware())
+	// Server.Use(middleware.WebviewMiddleware())
 	Server.SetTrustedProxies(nil)
 }
 
@@ -115,8 +128,8 @@ func Handler(app *app.App) {
 		InstansiRepository = repository.NewAgencyRepository(DB)
 		PokjaRepository    = repository.NewPokjaRepository(DB)
 		TujuanRepository   = repository.NewTujuanRepository(DB)
-		ImageStorage       = repository.NewLocalImageStorage()
-		Exporter           = repository.NewExcelExporter()
+		ImageStorage       = io.NewImageStorage("media/img")
+		Exporter           = io.NewExcelExporter()
 	)
 
 	var (
@@ -195,10 +208,9 @@ func Handler(app *app.App) {
 		app.Server.GET("/credits", func(ctx *gin.Context) {
 			ctx.HTML(200, "credits.html", gin.H{
 				"info": gin.H{
-					"appname":  AppName,
-					"version":  Version,
-					"protocol": Protocol,
-					"port":     Port,
+					"appname": AppName,
+					"version": Version,
+					"port":    Port,
 				},
 			})
 		})
@@ -212,14 +224,5 @@ func main() {
 	app := app.New(Server)
 	app.SetHandler(Handler)
 	app.SetPort(Port)
-
-	switch {
-	case run == "tls":
-		app.RunTLS()
-	case run == "http":
-		app.RunHTTP()
-	default:
-		fmt.Println("command not recognized")
-		os.Exit(1)
-	}
+	app.RunHTTP()
 }

@@ -6,7 +6,7 @@ clean:
 
 .PHONY: build
 build:
-	go build -a -ldflags="-X 'main.StatusMode=release' -s -w" -o=build/BukuTamu.exe main.go
+	set CGO_ENABLED=1 && go build -a -ldflags="-X 'main.StatusMode=release' -s -w" -o=build/BukuTamu.exe main.go
 	go build -a -ldflags="-s -w" -o=build/gblib.exe gblib\gblib.go
 
 copy:

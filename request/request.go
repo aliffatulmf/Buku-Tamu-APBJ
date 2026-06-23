@@ -14,7 +14,7 @@ type PemdaRequest struct {
 }
 
 type InstansiRequest struct {
-	ID        string
+	ID        uint
 	Name      string `form:"name" binding:"required"`
 	Email     string `form:"email"`
 	Telephone string `form:"telephone"`
