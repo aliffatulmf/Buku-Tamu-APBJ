@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"errors"
-	"flag"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -17,8 +16,6 @@ import (
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/service"
 
-	// "github.com/aliffatulmf/buku-tamu-apbj/middleware"
-
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -31,7 +28,7 @@ var a embed.FS
 var f embed.FS
 
 var (
-	StatusMode = gin.DebugMode
+	StatusMode string
 	Server     *gin.Engine
 	DB         *gorm.DB
 )
@@ -41,8 +38,6 @@ var (
 	Version = "2.0"
 	Port    = "6170"
 )
-
-var run string
 
 func init() {
 	cdir := [3]string{"media/img", "Documents/Pemda", "Documents/Penyedia"}
@@ -55,16 +50,15 @@ func init() {
 		}
 	}
 
-	flag.StringVar(&run, "run", "http", "run service using HTTP")
-	flag.Parse()
-
-	switch run {
-	case "release":
-		gin.SetMode(gin.ReleaseMode)
-		Server = gin.New()
-	default:
+	debug := os.Getenv("BUKUTAMU_DEBUG")
+	if debug == "1" {
+		StatusMode = gin.DebugMode
 		gin.SetMode(gin.DebugMode)
 		Server = gin.Default()
+	} else {
+		StatusMode = gin.ReleaseMode
+		gin.SetMode(gin.ReleaseMode)
+		Server = gin.New()
 	}
 
 	switch StatusMode {

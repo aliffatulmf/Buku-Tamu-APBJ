@@ -2,227 +2,276 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="Epic-Themes">
+    <title>Buku Tamu - Pilih Role</title>
 
-    <title>User Dashboard</title>
-
-    <!-- Loading Bootstrap -->
+    <!-- Bootstrap -->
     <link href="/assets/smart/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Loading Template CSS -->
-    <link href="/assets/smart/css/style.css" rel="stylesheet">
     <link href="/assets/smart/css/bootstrap-icons.css" rel="stylesheet">
-    <link href="/assets/smart/css/animate.css" rel="stylesheet">
-    <link href="/assets/smart/css/style-magnific-popup.css" rel="stylesheet">
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="/assets/fonts/nunito/nunito.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/assets/fontawesome/css/all.min.css">
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            overflow: hidden;
+            min-height: 100vh;
+            background: #ffffff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
         }
 
-        .zoom {
-            transition: ease-in-out 300ms;
-            cursor: pointer;
+        /* Navbar */
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 0;
         }
 
-        .zoom:hover {
-            transform: scale(1.2);
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #1a1a2e !important;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand i {
+            color: #4361ee;
+        }
+
+        .btn-keluar {
+            font-size: 0.875rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .btn-keluar:hover {
+            color: #ef4444;
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .role-section {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .role-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-subtitle {
+            font-size: 1rem;
+            color: #64748b;
+            margin-bottom: 3rem;
+        }
+
+        /* Role Cards */
+        .role-cards {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .role-card {
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .role-card:hover {
+            border-color: #4361ee;
+            transform: translateY(-4px);
+        }
+
+        .role-card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .role-card:nth-child(1) .role-card-icon {
+            background: rgba(67, 97, 238, 0.1);
+            color: #4361ee;
+        }
+
+        .role-card:nth-child(2) .role-card-icon {
+            background: rgba(124, 58, 237, 0.1);
+            color: #7c3aed;
+        }
+
+        .role-card:hover .role-card-icon {
+            transform: scale(1.05);
+        }
+
+        .role-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-card-desc {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .role-card-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .role-card:nth-child(1) .role-card-btn {
+            background: #4361ee;
+            color: #ffffff;
+        }
+
+        .role-card:nth-child(2) .role-card-btn {
+            background: #7c3aed;
+            color: #ffffff;
+        }
+
+        .role-card:hover .role-card-btn {
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .role-title {
+                font-size: 1.5rem;
+            }
+
+            .role-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .role-card {
+                width: 100%;
+                max-width: 100%;
+            }
         }
     </style>
-
 </head>
 
 <body>
-
-
-    <!-- begin header -->
-    <header>
-
-        <nav class="navbar navbar-expand-lg navbar-fixed-top">
-
-
-
-            <div class="container">
-
-                <!-- begin logo -->
-                <a class="navbar-brand" href="/user"><i class="bi bi-cursor"></i> Buku Tamu</a>
-                <!-- end logo -->
-
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
-                    aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"><i class="bi bi-list"></i></span>
-                </button>
-
-                <!-- <div class="collapse navbar-collapse" id="navbarScroll">
-
-                    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll justify-content-center">
-                        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#team">Our Team</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                    </ul>
-
-                </div> -->
-                <div class="col-md-3 text-end">
-                    <a href="javascript:window.open('', '_self').close();">
-                        <button id="exit-app" type="button" class="btn btn-sm btn-outline-light text-black-50"><i
-                                class="fa fa-power-off"></i> Keluar</button>
-                    </a>
-                    <!-- <a href="#"><button type="button" class="btn btn-primary">Sign-up</button></a> -->
-                </div>
-            </div>
-        </nav>
-
-    </header>
-    <!-- end header -->
-
-    <main>
-        <!--begin pricing section -->
-        <section class="section-white" id="pricing">
-
-            <!--begin container -->
-            <div class="container">
-
-                <!--begin row -->
-                <div class="row justify-content-evenly">
-
-                    <!--begin col-md-12 -->
-                    <div class="col-md-12 text-center padding-bottom-40">
-
-                        <h2>Masuk sebagai</h2>
-
-                    </div>
-                    <!--end col-md-12 -->
-
-                    <!--begin col-md-4-->
-                    <div class="col-md-4 zoom">
-
-                        <div class="price-box">
-
-                            <ul class="pricing-list">
-
-                                <li class="price-title">PEMDA</li>
-
-                                <li class="price-value"><i class="fa-solid fa-user-group"></i></li>
-
-                                <li class="price-subtitle"><br></li>
-
-                                <li class="price-tag-line"><a href="/pemda/registrasi">MASUK</a></li>
-
-                            </ul>
-
-                        </div>
-
-                    </div>
-                    <!--end col-md-4 -->
-
-                    <!--begin col-md-4-->
-                    <div class="col-md-4 zoom">
-
-                        <div class="price-box">
-
-                            <ul class="pricing-list">
-
-                                <li class="price-title white-text">PENYEDIA</li>
-
-                                <li class="price-value white-text"><i class="fa-solid fa-users"></i></li>
-
-                                <li class="price-subtitle white-text"><br></li>
-
-                                <li class="price-tag-line"><a href="/penyedia/registrasi">MASUK</a></li>
-
-                            </ul>
-
-                        </div>
-
-                    </div>
-                    <!--end col-md-4 -->
-
-                </div>
-                <!--end row -->
-
-            </div>
-            <!--end container -->
-
-        </section>
-        <!--end pricing section -->
-
-        <!--begin footer -->
-        {{/*
-        <div class="footer">
-
-            <!--begin container -->
-            <div class="container">
-
-                <!--begin row -->
-                <div class="row">
-
-                    <!--begin col-md-7 -->
-                    <div class="col-md-7">
-
-                        <!-- <p>© 2021 <span class="template-name">Smart</span>. Designed by Epic-Themes</p> -->
-
-                    </div>
-                    <!--end col-md-7 -->
-
-                    <!--begin col-md-5 -->
-                    <div class="col-md-5">
-
-                        <!--begin footer_social -->
-                        <ul class="footer_social">
-
-                            <!-- <li>Guest Book:</li> -->
-
-                            <!--                        <li><a href="#" class="twitter"><i class="bi bi-twitter"></i></a></li>-->
-
-                            <!--                        <li><a href="#" class="instagram"><i class="bi bi-instagram"></i></a></li>-->
-
-                            <!--                        <li><a href="#" class="whatsapp"><i class="bi bi-whatsapp"></i></a></li>-->
-
-                            <!--                        <li><a href="#" class="google"><i class="bi bi-google"></i></a></li>-->
-
-                            <!-- <li><a href="https://github.com/aliffatulmf" target="_blank" class="github"><i class="bi bi-github"></i></a></li> -->
-
-                        </ul>
-                        <!--end footer_social -->
-
-                    </div>
-                    <!--end col-md-5 -->
-
-                </div>
-                <!--end row -->
-
-            </div>
-            <!--end container -->
-
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/user">
+                <i class="fa-solid fa-book-open"></i>
+                Buku Tamu
+            </a>
+            <a href="javascript:window.open('', '_self').close();" class="btn btn-keluar">
+                <i class="fa fa-power-off me-1"></i> Keluar
+            </a>
         </div>
-        */}}
-        <!--end footer -->
+    </nav>
 
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="role-section">
+            <!-- <h1 class="role-title">Masuk sebagai</h1> -->
+            <!-- <p class="role-subtitle">Pilih peran untuk melanjutkan</p> -->
+
+            <div class="role-cards">
+                <!-- PEMDA Card -->
+                <a href="/pemda/registrasi" class="role-card">
+                    <div class="role-card-icon">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <h2 class="role-card-title">PEMERINTAH DAERAH</h2>
+                    <p class="role-card-desc">Akses pengelolaan data tamu instansi</p>
+                    <span class="role-card-btn">
+                        Masuk <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+
+                <!-- PENYEDIA Card -->
+                <a href="/penyedia/registrasi" class="role-card">
+                    <div class="role-card-icon">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <h2 class="role-card-title">PENYEDIA</h2>
+                    <p class="role-card-desc">Akses pendaftaran dan pengajuan barang/jasa</p>
+                    <span class="role-card-btn">
+                        Masuk <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+            </div>
+        </section>
     </main>
 
-    <!-- Load JS here for greater good =============================-->
-    <script src="/assets/smart/js/jquery-3.6.0.min.js"></script>
-    <script src="/assets/smart/js/bootstrap.min.js"></script>
-    <script src="/assets/smart/js/jquery.scrollTo-min.js"></script>
-    <script src="/assets/smart/js/jquery.magnific-popup.min.js"></script>
-    <script src="/assets/smart/js/jquery.nav.js"></script>
-    <script src="/assets/smart/js/wow.js"></script>
-    <script src="/assets/smart/js/plugins.js"></script>
-    <script src="/assets/smart/js/custom.js"></script>
-    <script src="/assets/fontawesome/js/all.min.js"></script>
+    <!-- Footer -->
+    <footer class="footer">
+        Buku Tamu APBJ &copy;
+        <script>document.write(new Date().getFullYear());</script>
+    </footer>
 
+    <!-- Scripts -->
+    <script src="/assets/smart/js/bootstrap.min.js"></script>
 </body>
 
 </html>

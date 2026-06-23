@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strings"
+
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"
 )
@@ -38,19 +40,21 @@ func (pemda PemdaService) Create(req request.PemdaRequest) error {
 		Phone:        req.Telephone,
 		AgencyID:     req.Agency,
 		SkpdOpd:      req.SkpdOpd,
-		Destination:  req.Destination,
+		Destination:  strings.ToLower(req.Destination),
 		Consultation: req.Consultation,
 		Pokja:        req.Pokja,
 		Image:        res,
 	}
 
-	switch entity.DestinationType(req.Destination) {
+	switch entity.DestinationType(model.Destination) {
 	case entity.DestinationAdvokasi:
 		err = pemda.Repository.CreateWithOmit(&model, "Consultation", "Pokja")
 	case entity.DestinationLPSE:
 		err = pemda.Repository.CreateWithOmit(&model, "Pokja")
 	case entity.DestinationPokja:
 		err = pemda.Repository.CreateWithOmit(&model, "Consultation")
+	default:
+		err = pemda.Repository.CreateWithOmit(&model)
 	}
 
 	if err != nil {

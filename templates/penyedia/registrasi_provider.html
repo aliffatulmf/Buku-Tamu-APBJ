@@ -6,11 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrasi Penyedia</title>
 
-    <!-- Include Choices CSS -->
-    <link rel="stylesheet" href="/assets/vendors/choices.js/choices.min.css" />
-
-    <link rel="stylesheet" href="/assets/fonts/nunito/nunito.css">
-    <link rel="stylesheet" href="/assets/fonts/montserrat/montserrat.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/bootstrap.css">
 
     <link rel="stylesheet" href="/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
@@ -19,6 +18,18 @@
     <link rel="stylesheet" href="/assets/css/app.css">
     <link rel="stylesheet" type="text/css" href="/assets/fontawesome/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -28,455 +39,468 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .page-header {
+            padding: 1.5rem 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .page-header h2 {
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 0;
+        }
+
+        .page-header .back-link {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .page-header .back-link:hover {
+            color: #4361ee;
+        }
+
+        .info-box {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box ul {
+            margin: 0;
+            padding-left: 1.25rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .info-box li {
+            margin-bottom: 0.25rem;
+        }
+
+        .form-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .form-body .row {
+            align-items: center;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0;
+            font-size: 0.875rem;
+        }
+
+        .form-label code {
+            color: #ef4444;
+            background: none;
+            font-size: 1rem;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            padding: 0.625rem 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .form-control:disabled,
+        .form-select:disabled {
+            background-color: #f9fafb;
+        }
+
+        .btn-primary {
+            background: #4361ee;
+            border: none;
+            border-radius: 8px;
+            padding: 0.625rem 1.25rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #3651d4;
+        }
+
+        .btn-secondary {
+            border-radius: 8px;
+            padding: 0.625rem 1.25rem;
+            font-weight: 600;
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+        }
+
+        .form-control.is-invalid,
+        .form-select.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .form-control.is-valid,
+        .form-select.is-valid {
+            border-color: #28a745;
+        }
+
+        .invalid-feedback {
+            font-size: 0.75rem;
+            color: #dc3545;
+            margin-top: 0.25rem;
+        }
+
+        .btn-camera {
+            border: 2px dashed #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            width: 100%;
+            aspect-ratio: 1/1;
+            color: #64748b;
+            background: #f9fafb;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .btn-camera:hover {
+            border-color: #4361ee;
+            color: #4361ee;
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .form-actions {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .camera-preview-wrapper {
+            position: relative;
+            width: 50%;
+        }
+
+        .camera-preview {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #4361ee;
+            aspect-ratio: 1/1;
+        }
+
+        .camera-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .camera-preview-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .webcam-container {
+            aspect-ratio: 4/3;
+        }
+
+        .webcam-preview-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+
+        .webcam-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        .webcam-preview-wrapper canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
     </style>
 </head>
 
 <body>
-    <div id="">
-        <div class="container">
-            <div class="page-heading mt-3">
-                <section class="bootstrap-select">
-                    <div class="row">
-                        <div class="col">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col text-start align-self-center">
-                                            <h2 class="text-uppercase" id="form" style="font-family: 'Montserrat';">Penyedia</h2>
-                                        </div>
-                                        <div class="col text-end align-self-center">
-                                            <div class="container">
-                                                <a href="/user"><i class="bi bi-chevron-left"> Kembali</i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>Tanda <code>*</code> wajib diisi.</li>
-                                        <li>Jika webcam tidak muncul, tutup window lalu buka kembali. Atau, klik tombol
-                                            "Muat Ulang Kamera".</li>
-                                    </ul>
+    <div id="app">
+        <div class="container py-4">
+            <!-- Header -->
+            <div class="page-header d-flex justify-content-between align-items-center">
+                <h2><i class="fa-solid fa-truck-fast text-primary me-2"></i> PENDAFTARAN PENYEDIA</h2>
+                <a href="/user" class="back-link">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+                </a>
+            </div>
 
-                                    {{ if .error }}
-                                    <div class="alert alert-danger text-center">
-                                        Gagal
-                                    </div>
-                                    <script>
-                                        setTimeout(function () {
-                                            window.location.href = ""
-                                        }, 1000)
-                                    </script>
-                                    {{ end }}
+            <!-- Info -->
+            <div class="info-box">
+                <ul>
+                    <li>Tanda <code>*</code> wajib diisi.</li>
+                    <li>Jika webcam tidak muncul, tutup window lalu buka kembali. Atau, klik tombol "Muat Ulang".</li>
+                </ul>
+            </div>
 
-                                    {{ if .success }}
-                                    <div class="alert alert-success text-center">
-                                        Berhasil
-                                    </div>
-                                    <script>
-                                        setTimeout(function () {
-                                            window.location.href = window.location.origin + "/user"
-                                        }, 1000)
-                                    </script>
-                                    {{ end }}
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-content">
-                                    <div class="card-body">
-                                        <form class="form form-horizontal" method="post" action="/penyedia/registrasi"
-                                            enctype="multipart/form-data">
-                                            <div class="form-body">
-                                                <div class="row">
-                                                    <!-- Nama -->
-                                                    <div class="col-md-4">
-                                                        <label>Nama <code>*</code></label>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                            <div class="position-relative">
-                                                                <input type="text" class="form-control" name="nama"
-                                                                    placeholder="" {{ if ne .success .error }} disabled {{ end }}>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Telephone -->
-                                                    <div class="col-md-4">
-                                                        <label>No. Telepon <code>*</code></label>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                            <div class="position-relative">
-                                                                <input type="number" class="form-control" name="telepon"
-                                                                    placeholder="" {{ if ne .success .error }} disabled {{ end }}>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Company -->
-                                                    <div class="col-md-4">
-                                                        <label>Nama Perusahaan <code>*</code></label>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                            <div class="position-relative">
-                                                                <input type="text" class="form-control" name="company"
-                                                                    placeholder="" {{ if ne .success .error }} disabled {{ end }}>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Keterangan -->
-                                                    <div class="col-md-4">
-                                                        <label>Keterangan</label>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                            <div class="position-relative">
-                                                                <input type="text" class="form-control"
-                                                                    name="keterangan" placeholder="" {{ if ne .success .error }}
-                                                                    disabled {{ end }}>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+            <!-- Alerts -->
+            {{ if .error }}
+            <div class="alert alert-danger text-center">
+                <i class="fa-solid fa-circle-exclamation me-2"></i> Gagal menyimpan data
+            </div>
+            <script>
+                setTimeout(function () {
+                    window.location.href = ""
+                }, 1000)
+            </script>
+            {{ end }}
 
-                                                    <!-- Tujuan -->
-                                                    <div class="col-md-4">
-                                                        <label>Tujuan <code>*</code></label>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                            <select class="choices form-select removable" name="tujuan"
-                                                                id="select-tujuan" {{ if ne .success .error }} disabled {{ end }}>
-                                                                {{ if .data }}
-                                                                {{ range $i, $v := .data.destination }}
-                                                                <option value="{{ $v.DestinationName }}">{{
-                                                                    $v.DestinationName }}
-                                                                </option>
-                                                                {{ end }}
-                                                                {{ end }}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Konsultasi -->
-                                                    <div class="col-md-4 hidden" id="label-konsultasi">
-                                                        <label>Konsultasi <code>*</code></label>
-                                                    </div>
-                                                    <div class="col-md-8 hidden" id="form-konsultasi">
-                                                        <div class="form-group">
-                                                            <select class="choices form-select removable"
-                                                                name="konsultasi" id="select-konsultasi">
-                                                                {{ if .data }}
-                                                                {{ range $i, $v := .data.consultation}}
-                                                                <option value="{{ $v.ConsultationName }}">{{
-                                                                    $v.ConsultationName }}
-                                                                </option>
-                                                                {{ end }}
-                                                                {{ end }}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Pokja -->
-                                                    <div class="col-md-4 hidden" id="label-pokja">
-                                                        <label>Pokja <code>*</code></label>
-                                                    </div>
-                                                    <div class="col-md-8 hidden" id="form-pokja">
-                                                        <div class="form-group">
-                                                            <select class="choices form-select removable" name="pokja"
-                                                                id="select-pokja">
-                                                                {{ if .data }}
-                                                                {{ range $i, $v := .data.pokja }}
-                                                                <option value="{{ $v.PokjaName }}">{{ $v.PokjaName }}
-                                                                </option>
-                                                                {{ end }}
-                                                                {{ end }}
-                                                            </select>
-                                                        </div>
-                                                    </div>
+            {{ if .success }}
+            <div class="alert alert-success text-center">
+                <i class="fa-solid fa-circle-check me-2"></i> Berhasil menyimpan data
+            </div>
+            <script>
+                setTimeout(function () {
+                    window.location.href = window.location.origin + "/user"
+                }, 1000)
+            </script>
+            {{ end }}
 
-                                                    <!-- Webcam -->
-                                                    <div class="col-md-4">
-                                                        <label>Webcam <code>*</code></label>
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <button type="button" class="btn btn-outline-primary block"
-                                                            data-bs-toggle="modal" data-bs-target="#border-less"
-                                                            id="camcam" {{ if ne .success .error }} disabled {{ end }} disabled>
-                                                            <i class="fa-solid fa-camera"></i> Buka Kamera
-                                                        </button>
+            <!-- Form -->
+            <form class="form form-horizontal" method="post" action="/penyedia/registrasi"
+                enctype="multipart/form-data" id="form-registrasi" onsubmit="return validateFormPenyedia()">
+                <div class="form-section-title">Data Diri</div>
+                <div class="form-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Nama <code>*</code></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="nama"
+                                placeholder="Masukkan nama lengkap" {{ if ne .success .error }} disabled {{ end }}>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">No. Telepon <code>*</code></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="number" class="form-control" name="telepon"
+                                placeholder="Masukkan nomor telepon" {{ if ne .success .error }} disabled {{ end }}>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Perusahaan <code>*</code></label>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="company"
+                                placeholder="Masukkan nama perusahaan" {{ if ne .success .error }} disabled {{ end }}>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Keterangan</label>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea class="form-control" name="keterangan" rows="3"
+                                placeholder="Deskripsi singkat perusahaan" {{ if ne .success .error }} disabled {{ end }}></textarea>
+                        </div>
+                    </div>
+                </div>
 
-                                                        <!--BorderLess Modal Modal -->
-                                                        <div class="modal fade text-left modal-borderless"
-                                                            id="border-less" tabindex="-1" role="dialog"
-                                                            aria-hidden="true">
-                                                            <div class="modal-dialog modal-dialog-scrollable modal-fullscreen"
-                                                                role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title">Webcam</h5>
-                                                                        <button type="button" class="close rounded-pill"
-                                                                            data-bs-dismiss="modal" aria-label="Close">
-                                                                            <i data-feather="x"></i>
-                                                                        </button>
-                                                                    </div>
+                <div class="form-section-title mt-4">Keperluan</div>
+                <div class="form-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Tujuan <code>*</code></label>
+                        </div>
+                        <div class="col-md-8">
+                            <select class="form-select" name="tujuan" id="select-tujuan" required
+                                {{ if ne .success .error }} disabled {{ end }}>
+                                <option value="">-- Pilih Tujuan --</option>
+                                {{ if .data }}
+                                {{ range $i, $v := .data.destination }}
+                                <option value="{{ $v.DestinationName }}">{{ $v.DestinationName }}</option>
+                                {{ end }}
+                                {{ end }}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3 hidden" id="row-pokja">
+                        <div class="col-md-4">
+                            <label class="form-label">Pokja <code>*</code></label>
+                        </div>
+                        <div class="col-md-8">
+                            <select class="form-select" name="pokja" id="select-pokja"
+                                {{ if ne .success .error }} disabled {{ end }}>
+                                <option value="">-- Pilih Pokja --</option>
+                                {{ if .data }}
+                                {{ range $i, $v := .data.pokja}}
+                                <option value="{{ $v.PokjaName }}">{{ $v.PokjaName }}</option>
+                                {{ end }}
+                                {{ end }}
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-                                                                    <div class="modal-body">
-                                                                        <input type="hidden" name="image" id="image">
-                                                                        <div class="d-flex justify-content-md-around">
-                                                                            <h4>Camera</h4>
-                                                                            <h4>Captured</h4>
-                                                                        </div>
-                                                                        <div class="d-flex justify-content-md-between">
-                                                                            <video class="rounded" id="camera"
-                                                                                width="608" autoplay></video>
-                                                                            <canvas class="rounded"
-                                                                                id="result"></canvas>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button"
-                                                                            class="btn btn-primary ml-1"
-                                                                            onclick="take_snapshot()">
-                                                                            <span class="d-none d-sm-block">Ambil</span>
-                                                                        </button>
-                                                                        <button type="button"
-                                                                            class="btn btn-light-primary"
-                                                                            data-bs-dismiss="modal" id="webcam-close-btn">
-                                                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                                                            <span class="d-none d-sm-block">Tutup</span>
-                                                                        </button>
-                                                                        <button type="button"
-                                                                            class="btn btn-light-secondary"
-                                                                            onclick="restart_camera()">Muat Ulang
-                                                                            Kamera</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-12 d-flex justify-content-end">
-                                                        <button type="submit" class="btn btn-primary me-1 mb-1" {{ if
-                                                            .error }} disabled {{ end }} {{ if .success }} disabled {{
-                                                            end }}>Kirim
-                                                        </button>
-                                                        <a href="">
-                                                            <button type="button" id="btn-reset"
-                                                                class="btn btn-light-secondary me-1 mb-1">
-                                                                Atur Ulang
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
+                <div class="form-section-title mt-4">Foto</div>
+                <div class="form-body">
+                    <input type="hidden" name="image" id="image">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Webcam <code>*</code></label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="camera-preview-wrapper" id="camera-wrapper">
+                                <button type="button" class="btn-camera" id="btn-open-camera"
+                                    data-bs-toggle="modal" data-bs-target="#border-less">
+                                    <i class="fa-solid fa-camera fa-lg"></i>
+                                    <span>Buka Kamera</span>
+                                </button>
+                                <div class="camera-preview d-none" id="camera-preview">
+                                    <img id="preview-img" src="" alt="Preview">
+                                    <div class="camera-preview-overlay">
+                                        <button type="button" class="btn btn-sm btn-light" onclick="resetPhoto()">
+                                            <i class="fa-solid fa-rotate me-1"></i> Ulangi
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
-                <!-- Bootstrap Select end -->
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="btn-reset" onclick="resetPhoto()"
+                        class="btn btn-secondary" {{ if ne .success .error }} disabled {{ end }}>
+                        <i class="fa-solid fa-rotate me-1"></i> Atur Ulang
+                    </button>
+                    <button type="submit" class="btn btn-primary"
+                        {{ if ne .success .error }} disabled {{ end }}>
+                        <i class="fa-solid fa-paper-plane me-1"></i> Kirim
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- Webcam Modal -->
+    <div class="modal fade" id="border-less" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title fw-bold">
+                            <i class="fa-solid fa-camera text-primary me-2"></i>
+                            Ambil Foto
+                        </h5>
+                        <small class="text-muted">Posisikan wajah di tengah frame</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <!-- Kamera Preview - Center Crop 1:1 -->
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <small class="text-muted fw-semibold text-uppercase mb-2 d-block">Live Preview</small>
+                                <div class="webcam-preview-wrapper">
+                                    <video class="webcam-video" id="camera" autoplay muted playsinline></video>
+                                    <div class="position-absolute top-0 start-0 m-2">
+                                        <span class="badge bg-danger">
+                                            <i class="fa-solid fa-circle fa-fade me-1"></i> LIVE
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hasil Foto -->
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <small class="text-muted fw-semibold text-uppercase mb-2 d-block">Hasil</small>
+                                <div class="webcam-preview-wrapper bg-light">
+                                    <canvas class="d-none" id="result"></canvas>
+                                    <div id="result-placeholder"
+                                        class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center text-muted">
+                                        <i class="fa-solid fa-image fa-3x mb-2 opacity-25"></i>
+                                        <small>Belum ada foto</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0 pt-0">
+                    <div class="d-flex gap-2 w-100 justify-content-end">
+                        <button type="button" class="btn btn-light-secondary" onclick="restart_camera()">
+                            <i class="fa-solid fa-rotate me-1"></i> Muat Ulang
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="take_snapshot()">
+                            <i class="fa-solid fa-camera me-1"></i> Ambil Foto
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="usePhoto()" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-check me-1"></i> Gunakan
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/jquery.numeric.min.js"></script>
     <script src="/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/vendors/toastify/toastify.js"></script>
 
-    <!-- Include Choices JavaScript -->
-    <script src="/assets/vendors/choices.js/choices.min.js"></script>
     <script src="/assets/js/mazer.js"></script>
     <script src="/assets/js/webcam-easy.min.js"></script>
     <script src="/assets/fontawesome/js/all.min.js"></script>
+    <script src="/assets/js/registrasi-common.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $("input[name='telepon']").numeric({decimal: false, negative: false});
-        });
-    </script>
-
-    <script>
-        var nameFld = document.querySelector("input[name='nama']");
-        var teleFld = document.querySelector("input[name='telepon']");
-        var comFld = document.querySelector("input[name='company']");
-        var ketFld = document.querySelector("input[name='keterangan']");
-
-        nameFld.addEventListener("input", e => {
-            if (e.currentTarget.value.length > 0) {
-                nameFld.classList.remove("is-invalid");
-                nameFld.classList.add("is-valid");
-            } else {
-                nameFld.classList.remove("is-valid");
-                nameFld.classList.add("is-invalid");
-            }
-        });
-
-        teleFld.addEventListener("input", e => {
-            if (e.currentTarget.value.length > 8) {
-                teleFld.classList.remove("is-invalid");
-                teleFld.classList.add("is-valid");
-            } else {
-                teleFld.classList.remove("is-valid");
-                teleFld.classList.add("is-invalid");
-            }
-        });
-
-        comFld.addEventListener("input", e => {
-            if (e.currentTarget.value.length > 0) {
-                comFld.classList.remove("is-invalid");
-                comFld.classList.add("is-valid");
-            } else {
-                comFld.classList.remove("is-valid");
-                comFld.classList.add("is-invalid");
-            }
-        });
-
-        ketFld.addEventListener("input", e => {
-            if (e.currentTarget.value.length > 0) {
-                ketFld.classList.remove("is-invalid");
-                ketFld.classList.add("is-valid");
-            } else {
-                ketFld.classList.remove("is-valid");
-                ketFld.classList.add("is-invalid");
-            }
-        });
-    </script>
-
-    <!-- Webcam -->
-    <script>
-        const camera = document.getElementById("camera")
-        const canvas = document.getElementById("result")
-        const webcam = new Webcam(camera, 'user', canvas)
-        const urlParams = new URLSearchParams(window.location.search)
-
-        "{{ if eq .success .error }}"
-        start_camera()
-        "{{ end }}"
-
-        function start_camera() {
-            webcam.start()
-                .then(result => {
-                    Toastify({
-                        text: "Kamera berhasil diakses",
-                        duration: 1000,
-                        close: false,
-                        gravity: "top",
-                        position: "center",
-                        backgroundColor: "#4fbe87",
-                    }).showToast()
-
-                    $("#camcam").prop("disabled", false)
-                })
-                .catch(err => {
-                    Toastify({
-                        text: "Terjadi kesalahan saat mengakses kamera",
-                        duration: 1000,
-                        close: false,
-                        gravity: "top",
-                        position: "center",
-                        backgroundColor: "#dc3545",
-                    }).showToast()
-                })
-        }
-
-        function stop_camera() {
-            webcam.stop()
-        }
-
-        function take_snapshot() {
-            picture = webcam.snap()
-            $("#image").val(picture)
-
-            Toastify({
-                text: "Gambar berhasil diambil",
-                duration: 1000,
-                close: false,
-                gravity: "top",
-                position: "center",
-                backgroundColor: "#4fbe87",
-            }).showToast()
-        }
-
-        function restart_camera() {
-            stop_camera()
-            start_camera()
-        }
-
-
-    </script>
-
-    <script>
-        let choices = document.querySelectorAll('.choices');
-        let initChoice;
-        let selected = []
-
-        for (let i = 0; i < choices.length; i++) {
-            if (choices[i].classList.contains("removable")) {
-                initChoice = new Choices(choices[i],
-                    {
-                        delimiter: ',',
-                        editItems: false,
-                        maxItemCount: -1,
-                        removeItemButton: false,
-                        renderChoiceLimit: 5,
-                        searchResultLimit: 10,
-                    });
-
-                selected.push({ name: choices[i].id, element: initChoice })
-            } else {
-                initChoice = new Choices(choices[i]);
-            }
-        }
-
-        for (let i = 0; i < selected.length; i++) {
-            selected[i].element.removeActiveItems()
-        }
-
-        $("#select-tujuan").change(function (e) {
-            if (e.currentTarget.value == "ADVOKASI") {
-                $("#label-pokja").even().addClass("hidden")
-                $("#form-pokja").even().addClass("hidden")
-                $("#label-konsultasi").even().addClass("hidden")
-                $("#form-konsultasi").even().addClass("hidden")
-
-                for (let i = 0; i < selected.length; i++) {
-                    if (selected[i].name == "select-konsultasi") {
-                        selected[i].element.removeActiveItems()
-                    }
-
-                    if (selected[i].name == "select-pokja") {
-                        selected[i].element.removeActiveItems()
-                    }
-                }
-            }
-
-            if (e.currentTarget.value == "LPSE") {
-                $("#label-konsultasi").even().removeClass("hidden")
-                $("#form-konsultasi").even().removeClass("hidden")
-            } else {
-                $("#label-konsultasi").even().addClass("hidden")
-                $("#form-konsultasi").even().addClass("hidden")
-
-                for (let i = 0; i < selected.length; i++) {
-                    if (selected[i].name == "select-pokja") {
-                        selected[i].element.removeActiveItems()
-                    }
-                }
-            }
-
-            if (e.currentTarget.value == "POKJA") {
-                $("#label-pokja").even().removeClass("hidden")
-                $("#form-pokja").even().removeClass("hidden")
-            } else {
-                $("#label-pokja").even().addClass("hidden")
-                $("#form-pokja").even().addClass("hidden")
-
-                for (let i = 0; i < selected.length; i++) {
-                    if (selected[i].name == "select-konsultasi") {
-                        selected[i].element.removeActiveItems()
-                    }
-                }
-            }
-        })
+        initWebcamModal()
     </script>
 </body>
 

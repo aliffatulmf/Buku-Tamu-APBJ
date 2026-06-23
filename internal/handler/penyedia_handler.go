@@ -56,13 +56,13 @@ func (penyedia PenyediaHandler) PenyediaList(ctx *gin.Context) {
 	var flt request.FilterQueryRequest
 
 	if err := ctx.ShouldBindQuery(&flt); err != nil {
-		ctx.HTML(http.StatusBadRequest, "error-400.html", gin.H{})
+		ctx.Redirect(http.StatusFound, "/penyedia/terdaftar")
 		return
 	}
 
 	res, err := penyedia.Service.Find(flt)
 	if err != nil {
-		ctx.HTML(http.StatusInternalServerError, "error-500.html", gin.H{})
+		ctx.Redirect(http.StatusFound, "/penyedia/terdaftar")
 		return
 	}
 

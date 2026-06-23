@@ -39,8 +39,8 @@ type FilterQueryRequest struct {
 	QF         string    `form:"qf"`
 	SBN        string    `form:"sbn"`
 	Permission string    `form:"permission"`
-	From       time.Time `form:"from"`
-	To         time.Time `form:"to"`
+	From       time.Time `form:"from" time_format:"2006-01-02"`
+	To         time.Time `form:"to" time_format:"2006-01-02"`
 }
 
 type ExportQuery struct {

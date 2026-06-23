@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"
@@ -33,7 +34,7 @@ func (penyedia PenyediaService) Create(req request.PenyediaRequest) error {
 		Phone:        req.Telephone,
 		Company:      req.Company,
 		Description:  req.Description,
-		Destination:  req.Destination,
+		Destination:  strings.ToLower(req.Destination),
 		Consultation: req.Consultation,
 		Pokja:        req.Pokja,
 		Image:        img,
@@ -46,6 +47,8 @@ func (penyedia PenyediaService) Create(req request.PenyediaRequest) error {
 		err = penyedia.Repository.CreateWithOmit(&model, "Pokja")
 	case entity.DestinationPokja:
 		err = penyedia.Repository.CreateWithOmit(&model, "Consultation")
+	default:
+		err = penyedia.Repository.CreateWithOmit(&model)
 	}
 
 	if err != nil {
