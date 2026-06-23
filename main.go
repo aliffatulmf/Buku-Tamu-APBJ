@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"os"
 
-	"GuestBookPP/app"
-	"GuestBookPP/database"
-	"GuestBookPP/interface/handler"
-	"GuestBookPP/interface/repository"
-	"GuestBookPP/interface/service"
-	"GuestBookPP/middleware"
+	"github.com/aliffatulmf/buku-tamu-apbj/app"
+	"github.com/aliffatulmf/buku-tamu-apbj/database"
+	"github.com/aliffatulmf/buku-tamu-apbj/interface/handler"
+	"github.com/aliffatulmf/buku-tamu-apbj/interface/repository"
+	"github.com/aliffatulmf/buku-tamu-apbj/interface/service"
+	"github.com/aliffatulmf/buku-tamu-apbj/middleware"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

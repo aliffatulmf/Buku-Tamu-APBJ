@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"GuestBookPP/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/entity"
 
 	"gorm.io/gorm"
 )

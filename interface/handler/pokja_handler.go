@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 
-	"GuestBookPP/interface/service"
-	"GuestBookPP/request"
+	"github.com/aliffatulmf/buku-tamu-apbj/interface/service"
+	"github.com/aliffatulmf/buku-tamu-apbj/request"
 
 	"github.com/gin-gonic/gin"
 )

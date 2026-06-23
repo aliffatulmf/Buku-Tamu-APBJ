@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"GuestBookPP/interface/service"
-	"GuestBookPP/request"
+	"github.com/aliffatulmf/buku-tamu-apbj/interface/service"
+	"github.com/aliffatulmf/buku-tamu-apbj/request"
 	"log"
 	"net/http"
 

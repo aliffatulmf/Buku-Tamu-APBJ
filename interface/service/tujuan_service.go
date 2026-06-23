@@ -1,8 +1,8 @@
 package service
 
 import (
-	"GuestBookPP/entity"
-	"GuestBookPP/interface/repository"
+	"github.com/aliffatulmf/buku-tamu-apbj/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/interface/repository"
 )
 
 type TujuanService struct {

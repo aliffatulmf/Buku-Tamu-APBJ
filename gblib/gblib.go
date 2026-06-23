@@ -1,8 +1,8 @@
 package main
 
 import (
-	"GuestBookPP/entity"
-	gblib "GuestBookPP/gblib/pkg"
+	"github.com/aliffatulmf/buku-tamu-apbj/entity"
+	gblib "github.com/aliffatulmf/buku-tamu-apbj/gblib/pkg"
 	"flag"
 	"fmt"
 	"os"

@@ -1,9 +1,9 @@
 package service
 
 import (
-	"GuestBookPP/entity"
-	"GuestBookPP/interface/repository"
-	"GuestBookPP/request"
+	"github.com/aliffatulmf/buku-tamu-apbj/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/interface/repository"
+	"github.com/aliffatulmf/buku-tamu-apbj/request"
 )
 
 type PokjaService struct {

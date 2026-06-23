@@ -1,6 +1,6 @@
 package gblib
 
-import "GuestBookPP/entity"
+import "github.com/aliffatulmf/buku-tamu-apbj/entity"
 
 var InstansiModel = []entity.Agency{
 	{

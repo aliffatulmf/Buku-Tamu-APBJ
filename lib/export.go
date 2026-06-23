@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"GuestBookPP/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/entity"
 	"fmt"
 	"os"
 	"path/filepath"

@@ -3,7 +3,7 @@ package repository
 import (
 	"errors"
 
-	"GuestBookPP/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/entity"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

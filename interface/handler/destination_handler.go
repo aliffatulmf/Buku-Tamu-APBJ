@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"GuestBookPP/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/entity"
 
 	"github.com/gin-gonic/gin"
 )

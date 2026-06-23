@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	liberr "GuestBookPP/lib/errors"
+	liberr "github.com/aliffatulmf/buku-tamu-apbj/lib/errors"
 
 	"github.com/google/uuid"
 )

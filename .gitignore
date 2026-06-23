@@ -16,3 +16,5 @@ release-builds
 # Exception
 !btdaemon.exe
 !mkcert.exe
+# CocoIndex Code (ccc)
+/.cocoindex_code/
