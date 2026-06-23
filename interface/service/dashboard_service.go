@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/aliffatulmf/buku-tamu-apbj/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
 	"github.com/aliffatulmf/buku-tamu-apbj/interface/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/lib"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"

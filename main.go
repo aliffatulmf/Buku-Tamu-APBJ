@@ -11,9 +11,9 @@ import (
 
 	"github.com/aliffatulmf/buku-tamu-apbj/app"
 	"github.com/aliffatulmf/buku-tamu-apbj/database"
-	"github.com/aliffatulmf/buku-tamu-apbj/interface/handler"
-	"github.com/aliffatulmf/buku-tamu-apbj/interface/repository"
-	"github.com/aliffatulmf/buku-tamu-apbj/interface/service"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/handler"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/service"
 	"github.com/aliffatulmf/buku-tamu-apbj/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -115,20 +115,23 @@ func Handler(app *app.App) {
 		InstansiRepository = repository.NewAgencyRepository(DB)
 		PokjaRepository    = repository.NewPokjaRepository(DB)
 		TujuanRepository   = repository.NewTujuanRepository(DB)
+		ImageStorage       = repository.NewLocalImageStorage()
+		Exporter           = repository.NewExcelExporter()
 	)
 
 	var (
-		DashboardService = service.NewDashboardServices(service.DashboardService{
-			Pemda:    PemdaRepository,
-			Provider: PenyediaRepository,
-			Instansi: InstansiRepository,
-			Pokja:    PokjaRepository,
-		})
-		PenyediaService = service.NewProviderService(PenyediaRepository)
+		DashboardService = service.NewDashboardServices(
+			PemdaRepository,
+			PenyediaRepository,
+			PokjaRepository,
+			InstansiRepository,
+			Exporter,
+		)
+		PenyediaService = service.NewProviderService(PenyediaRepository, ImageStorage)
 		TujuanService   = service.NewTujuanService(TujuanRepository)
 		InstansiService = service.NewAgencyService(InstansiRepository)
 		PokjaService    = service.NewPokjaService(PokjaRepository)
-		PemdaService    = service.NewPemdaService(PemdaRepository, InstansiRepository)
+		PemdaService    = service.NewPemdaService(PemdaRepository, InstansiRepository, ImageStorage)
 	)
 
 	var (

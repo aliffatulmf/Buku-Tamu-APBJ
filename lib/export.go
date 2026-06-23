@@ -33,7 +33,7 @@ func NewExportPemda(records []entity.TypePemdaAgency) error {
 	sheet := "Sheet1"
 
 	for i := 1; i < len(header)+1; i++ {
-		f.SetCellValue(sheet, fmt.Sprintf("%s1", string(64+i)), header[i-1])
+		f.SetCellValue(sheet, fmt.Sprintf("%s1", string(rune(64+i))), header[i-1])
 	}
 
 	for idx, rec := range records {
@@ -74,7 +74,7 @@ func NewExportPenyedia(records []entity.Provider) error {
 	sheet := "Sheet1"
 
 	for i := 1; i < len(header)+1; i++ {
-		f.SetCellValue(sheet, fmt.Sprintf("%s1", string(64+1)), header[i-1])
+		f.SetCellValue(sheet, fmt.Sprintf("%s1", string(rune(64+i))), header[i-1])
 	}
 
 	for idx, rec := range records {
