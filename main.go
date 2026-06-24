@@ -1,8 +1,12 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"html/template"
+	"io/fs"
+	"log"
+	"net/http"
 	"os"
 	"strings"
 
@@ -21,50 +25,84 @@ import (
 
 var (
 	StatusMode string
-	Server     *gin.Engine
-	DB         *gorm.DB
 )
 
 const (
 	AppName = "Buku Tamu"
 	Version = "2.2"
 	Port    = "6170"
+
+	defaultImagePath = "media/images"
 )
 
-func main() {
-	cdirs := []string{"media/images", "Documents/Pemda", "Documents/Penyedia"}
-	for _, dir := range cdirs {
-		if _, err := os.Stat(dir); os.IsNotExist(err) {
-			if err := os.MkdirAll(dir, os.ModeDir); err != nil {
-				fmt.Printf("FATAL: %s\n", err.Error())
-				os.Exit(1)
-			}
-		}
-	}
+//go:embed assets/*
+var assetsFS embed.FS
 
+//go:embed templates/*
+var templatesFS embed.FS
+
+func initGin() *gin.Engine {
+	var r *gin.Engine
 	if os.Getenv("BUKUTAMU_DEBUG") == "1" {
 		StatusMode = gin.DebugMode
 		gin.SetMode(gin.DebugMode)
-		Server = gin.Default()
+		r = gin.Default()
 	} else {
 		StatusMode = gin.ReleaseMode
 		gin.SetMode(gin.ReleaseMode)
-		Server = gin.New()
+		r = gin.New()
 	}
 
-	Server.SetFuncMap(template.FuncMap{
-		"increment": func(x int) int { return x + 1 },
-	})
-	Server.LoadHTMLGlob("templates/**/*.html")
-	Server.Static("/assets", "assets/")
-	Server.Static("/media", "media/")
-	Server.SetTrustedProxies(nil)
+	return r
+}
 
-	dbConfig := gorm.Config{Logger: logger.Default}
-	DB = database.NewConnection(&dbConfig)
+func initDB() *gorm.DB {
+	return database.NewConnection(&gorm.Config{Logger: logger.Default})
+}
+
+func initDirs() {
+	dirs := []string{"media/images", "Documents/Pemda", "Documents/Penyedia"}
+	for _, dir := range dirs {
+		if err := os.MkdirAll(dir, os.ModeDir); err != nil {
+			fmt.Printf("FATAL: %s\n", err.Error())
+			os.Exit(1)
+		}
+	}
+}
+
+func main() {
+	initDirs()
+
+	db := initDB()
+	r := initGin()
+
+	assetFS, err := fs.Sub(assetsFS, "assets")
+	if err != nil {
+		log.Fatal(err)
+	}
+	r.StaticFS("/assets", http.FS(assetFS))
+
+	subTmplFS, err := fs.Sub(templatesFS, "templates")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	tmplFiles, err := fs.Glob(subTmplFS, "*/*.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	funcMap := template.FuncMap{
+		"increment": func(x int) int { return x + 1 },
+	}
+
+	tmpl := template.Must(template.New("templates").Funcs(funcMap).ParseFS(subTmplFS, tmplFiles...))
+	r.SetHTMLTemplate(tmpl)
+	r.Static("/media", "media/")
+	r.SetTrustedProxies(nil)
 
 	if !isClientIdValid() {
-		DB.AutoMigrate(
+		db.AutoMigrate(
 			&entity.Destination{},
 			&entity.Consultation{},
 			&entity.Pokja{},
@@ -72,27 +110,27 @@ func main() {
 			&entity.Pemda{},
 			&entity.Provider{},
 		)
-		database.Seed(DB)
+		database.Seed(db)
 	}
 
-	wire()
+	wire(r, db)
 
 	port := Port
 	if !strings.Contains(port, ":") {
 		port = fmt.Sprintf(":%s", port)
 	}
-	if err := Server.Run(port); err != nil {
+	if err := r.Run(port); err != nil {
 		fmt.Println("FATAL:", err.Error())
 	}
 }
 
-func wire() {
-	PemdaRepository := repository.NewPemdaRepository(DB)
-	PenyediaRepository := repository.NewPenyediaRepository(DB)
-	InstansiRepository := repository.NewAgencyRepository(DB)
-	PokjaRepository := repository.NewPokjaRepository(DB)
-	TujuanRepository := repository.NewTujuanRepository(DB)
-	ImageStorage := io.NewImageStorage("media/img")
+func wire(r *gin.Engine, db *gorm.DB) {
+	PemdaRepository := repository.NewPemdaRepository(db)
+	PenyediaRepository := repository.NewPenyediaRepository(db)
+	InstansiRepository := repository.NewAgencyRepository(db)
+	PokjaRepository := repository.NewPokjaRepository(db)
+	TujuanRepository := repository.NewTujuanRepository(db)
+	ImageStorage := io.NewImageStorage(defaultImagePath)
 	Exporter := io.NewExcelExporter()
 
 	DashboardService := service.NewDashboardServices(PemdaRepository, PenyediaRepository, PokjaRepository, InstansiRepository, Exporter)
@@ -109,11 +147,11 @@ func wire() {
 	PemdaHandler := handler.NewPemdaHandler(PemdaService, TujuanService, InstansiService)
 
 	// Dashboard
-	Server.GET("/", DashboardHandler.DashbordIndex)
-	Server.GET("/export", DashboardHandler.DashboardExport)
+	r.GET("/", DashboardHandler.DashbordIndex)
+	r.GET("/export", DashboardHandler.DashboardExport)
 
 	// Instansi
-	instansi := Server.Group("/instansi")
+	instansi := r.Group("/instansi")
 	instansi.GET("/registrasi", InstansiHandler.InstansiIndex)
 	instansi.GET("/terdaftar", InstansiHandler.InstansiFind)
 	instansi.GET("/terdaftar/:id", InstansiHandler.InstansiDetail)
@@ -121,7 +159,7 @@ func wire() {
 	instansi.POST("/terdaftar/:id", InstansiHandler.InstansiUpdate)
 
 	// Penyedia
-	penyedia := Server.Group("/penyedia")
+	penyedia := r.Group("/penyedia")
 	penyedia.GET("/registrasi", PenyediaHandler.PenyediaIndex)
 	penyedia.GET("/terdaftar", PenyediaHandler.PenyediaList)
 	penyedia.GET("/terdaftar/:id", PenyediaHandler.PenyediaDetail)
@@ -130,7 +168,7 @@ func wire() {
 	penyedia.DELETE("/terdaftar/:id", PenyediaHandler.PenyediaDelete)
 
 	// Pokja
-	pokja := Server.Group("/pokja")
+	pokja := r.Group("/pokja")
 	pokja.GET("/registrasi", PokjaHandler.PokjaIndex)
 	pokja.GET("/terdaftar", PokjaHandler.PokjaList)
 	pokja.GET("/terdaftar/:id", PokjaHandler.PokjaDetail)
@@ -139,7 +177,7 @@ func wire() {
 	pokja.DELETE("/terdaftar/:id", PokjaHandler.PokjaDelete)
 
 	// Pemda
-	pemda := Server.Group("/pemda")
+	pemda := r.Group("/pemda")
 	pemda.GET("/registrasi", PemdaHandler.PemdaIndex)
 	pemda.GET("/terdaftar", PemdaHandler.PemdaList)
 	pemda.GET("/terdaftar/:id", PemdaHandler.PemdaDetail)
@@ -148,12 +186,12 @@ func wire() {
 	pemda.DELETE("/terdaftar/:id", PemdaHandler.DeleteByID)
 
 	// Other pages
-	Server.GET("/credits", func(ctx *gin.Context) {
+	r.GET("/credits", func(ctx *gin.Context) {
 		ctx.HTML(200, "credits.html", gin.H{
 			"info": gin.H{"appname": AppName, "version": Version, "port": Port},
 		})
 	})
-	Server.GET("/user", func(ctx *gin.Context) {
+	r.GET("/user", func(ctx *gin.Context) {
 		ctx.HTML(200, "user-dashboard.html", gin.H{})
 	})
 }

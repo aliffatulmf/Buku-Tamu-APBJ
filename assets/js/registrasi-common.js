@@ -181,9 +181,22 @@ function resetPhoto() {
     $("#camera-preview").addClass("d-none")
     $("#result").addClass("d-none")
     $("#result-placeholder").removeClass("d-none")
-    // Open modal - start_camera() will be called by modal show event
     var modal = new bootstrap.Modal(document.getElementById('border-less'))
     modal.show()
+}
+
+function resetForm() {
+    $("#form-registrasi")[0].reset()
+    $(".form-control, .form-select").removeClass("is-invalid is-valid")
+    $(".invalid-feedback").remove()
+    $("#image").val("")
+    $("#preview-img").attr("src", "")
+    $("#btn-open-camera").removeClass("d-none")
+    $("#camera-preview").addClass("d-none")
+    $("#result").addClass("d-none")
+    $("#result-placeholder").removeClass("d-none")
+    $("#row-pokja").addClass("hidden")
+    $("#select-pokja").prop("required", false)
 }
 
 // ============================================
