@@ -181,7 +181,9 @@ function resetPhoto() {
     $("#camera-preview").addClass("d-none")
     $("#result").addClass("d-none")
     $("#result-placeholder").removeClass("d-none")
-    start_camera()
+    // Open modal - start_camera() will be called by modal show event
+    var modal = new bootstrap.Modal(document.getElementById('border-less'))
+    modal.show()
 }
 
 // ============================================
