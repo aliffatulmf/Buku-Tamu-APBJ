@@ -1,0 +1,90 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            compiler: msvc
+            msvc_arch: x64
+            goarch: amd64
+            output: buku-tamu-x64-msvc.exe
+          - arch: x64
+            compiler: gcc
+            mingw_path: C:\mingw64\bin
+            goarch: amd64
+            output: buku-tamu-x64-gcc.exe
+          - arch: x32
+            compiler: msvc
+            msvc_arch: x86
+            goarch: 386
+            output: buku-tamu-x32-msvc.exe
+          - arch: x32
+            compiler: gcc
+            mingw_path: C:\mingw32\bin
+            goarch: 386
+            output: buku-tamu-x32-gcc.exe
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v6
+        with:
+          go-version: "1.17"
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: matrix.compiler == 'msvc'
+        with:
+          arch: ${{ matrix.msvc_arch }}
+
+      - name: Set GCC CC
+        if: matrix.compiler == 'gcc'
+        shell: bash
+        run: |
+          if [ "${{ matrix.goarch }}" = "386" ]; then
+            echo "CC=i686-w64-mingw32-gcc" >> $GITHUB_ENV
+          else
+            echo "CC=x86_64-w64-mingw32-gcc" >> $GITHUB_ENV
+          fi
+
+      - name: Build
+        id: build
+        env:
+          CGO_ENABLED: "1"
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          if (!(Test-Path build)) { mkdir build }
+          if ("${{ matrix.compiler }}" -eq "gcc") {
+            $env:PATH = "${{ matrix.mingw_path }};$env:PATH"
+          }
+          go build -trimpath -o build/${{ matrix.output }} main.go
+
+      - uses: actions/upload-artifact@v7
+        if: steps.build.outcome == 'success'
+        with:
+          name: ${{ matrix.output }}
+          path: build/${{ matrix.output }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: artifacts/*
+          generate_release_notes: true
