@@ -25,7 +25,7 @@ import (
 
 const (
 	AppName = "Buku Tamu"
-	Version = "2.2"
+	Version = "2.3"
 	Port    = "6170"
 
 	defaultImagePath = "media/images"
