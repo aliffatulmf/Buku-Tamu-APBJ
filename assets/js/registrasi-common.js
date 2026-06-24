@@ -2,6 +2,11 @@
 // Shared functions for Pemda and Penyedia registration pages
 
 // ============================================
+// Face Detection State
+// ============================================
+var faceDetectorReady = false;
+
+// ============================================
 // Webcam Functions
 // ============================================
 var webcamInstance = null;
@@ -12,8 +17,24 @@ function initWebcam() {
     webcamInstance = new Webcam(camera, 'user', canvas)
 }
 
-function start_camera() {
+async function start_camera() {
     if (!webcamInstance) initWebcam()
+    
+    // Initialize face detector if not ready
+    if (!faceDetectorReady) {
+        // Wait for module to load
+        let attempts = 0;
+        while (!window.FaceDetection && attempts < 50) {
+            await new Promise(r => setTimeout(r, 100));
+            attempts++;
+        }
+        
+        if (window.FaceDetection) {
+            faceDetectorReady = await window.FaceDetection.init()
+        } else {
+            console.warn("FaceDetection module not loaded")
+        }
+    }
     
     webcamInstance.start()
         .then(result => {
@@ -27,6 +48,13 @@ function start_camera() {
             }).showToast()
 
             $("#btn-open-camera").prop("disabled", false)
+            
+            // Setup face detection overlay and start loop
+            var video = document.getElementById("camera")
+            if (faceDetectorReady && video && window.FaceDetection) {
+                window.FaceDetection.setupOverlay(video)
+                window.FaceDetection.startLoop(video)
+            }
         })
         .catch(err => {
             Toastify({
@@ -41,6 +69,10 @@ function start_camera() {
 }
 
 function stop_camera() {
+    if (window.FaceDetection) {
+        window.FaceDetection.stopLoop()
+    }
+    
     if (webcamInstance) {
         webcamInstance.stop()
         webcamInstance = null
@@ -63,6 +95,22 @@ function initWebcamModal() {
 }
 
 function take_snapshot() {
+    // Validate face count before taking photo
+    if (window.FaceDetection) {
+        var validation = window.FaceDetection.validate()
+        if (!validation.valid) {
+            Toastify({
+                text: validation.message,
+                duration: 3000,
+                close: false,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#dc3545",
+            }).showToast()
+            return
+        }
+    }
+    
     var video = document.getElementById("camera")
     var canvas = document.getElementById("result")
     var ctx = canvas.getContext("2d")
@@ -86,7 +134,7 @@ function take_snapshot() {
     ctx.translate(size, 0)
     ctx.scale(-1, 1)
     
-    // Draw center cropped image
+    // Draw center cropped image (clean, no bounding boxes)
     ctx.drawImage(video, startX, startY, size, size, 0, 0, size, size)
     
     // Reset transform
