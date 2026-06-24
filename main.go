@@ -23,16 +23,14 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var (
-	StatusMode string
-)
-
 const (
 	AppName = "Buku Tamu"
 	Version = "2.2"
 	Port    = "6170"
 
 	defaultImagePath = "media/images"
+
+	envKeyDebug = "BUKUTAMU_DEBUG"
 )
 
 //go:embed assets/*
@@ -43,12 +41,10 @@ var templatesFS embed.FS
 
 func initGin() *gin.Engine {
 	var r *gin.Engine
-	if os.Getenv("BUKUTAMU_DEBUG") == "1" {
-		StatusMode = gin.DebugMode
+	if os.Getenv(envKeyDebug) == "1" {
 		gin.SetMode(gin.DebugMode)
 		r = gin.Default()
 	} else {
-		StatusMode = gin.ReleaseMode
 		gin.SetMode(gin.ReleaseMode)
 		r = gin.New()
 	}
@@ -93,7 +89,7 @@ func main() {
 	}
 
 	funcMap := template.FuncMap{
-		"increment": func(x int) int { return x + 1 },
+		"start1": func(x int) int { return x + 1 },
 	}
 
 	tmpl := template.Must(template.New("templates").Funcs(funcMap).ParseFS(subTmplFS, tmplFiles...))
