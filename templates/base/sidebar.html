@@ -1,24 +1,66 @@
 {{ define "base/sidebar.html" }}
+<style>
+    .sidebar-wrapper .menu {
+        padding: 0 1rem;
+        margin-top: 2rem;
+    }
+    .sidebar-wrapper .sidebar-header {
+        text-align: center;
+        padding: 2rem 1rem 1rem;
+    }
+    .sidebar-menu .menu .sidebar-link {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.75rem;
+        padding: 0.7rem 1rem;
+    }
+    .sidebar-menu .menu .sidebar-link span {
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        line-height: 1;
+    }
+    .sidebar-menu .menu .sidebar-link .icon-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        flex-shrink: 0;
+    }
+    .sidebar-menu .menu .sidebar-link .icon-wrap i {
+        font-size: 1rem;
+        line-height: 1;
+    }
+    .sidebar-menu .menu .submenu-item a {
+        display: block;
+        text-align: left;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+    }
+</style>
 <div class="sidebar-menu">
     <ul class="menu">
         <!-- <li class="sidebar-title">Menu</li> -->
 
         <li class="sidebar-item">
             <a href="/" class='sidebar-link'>
-                <i class="fa-solid fa-house"></i>
+                <span class="icon-wrap"><i class="fa-solid fa-house"></i></span>
                 <span>Dashboard</span>
             </a>
         </li>
         <!-- Pemda -->
         <li class="sidebar-item" id="menu-pemda">
             <a href="/pemda/terdaftar" class="sidebar-link">
-                <i class="fa-solid fa-building-user"></i>
+                <span class="icon-wrap"><i class="fa-solid fa-building-user"></i></span>
                 <span>Pemda</span>
             </a>
         </li>
         <!-- <li class="sidebar-item has-sub" id="menu-pemda">
             <a href="#" class='sidebar-link'>
-                <i class="fa-solid fa-building-user"></i>
+                <span class="icon-wrap"><i class="fa-solid fa-building-user"></i></span>
                 <span>Pemda</span>
             </a>
             <ul class="submenu">
@@ -33,13 +75,13 @@
         <!-- Penyedia -->
         <li class="sidebar-item" id="menu-provider">
             <a href="/penyedia/terdaftar" class="sidebar-link">
-                <i class="fa-solid fa-building-user"></i>
+                <span class="icon-wrap"><i class="fa-solid fa-building-user"></i></span>
                 <span>Penyedia</span>
             </a>
         </li>
 <!--        <li class="sidebar-item has-sub" id="menu-provider">-->
 <!--            <a href="#" class='sidebar-link'>-->
-<!--                <i class="fa-solid fa-building-user"></i>-->
+<!--                <span class="icon-wrap"><i class="fa-solid fa-building-user"></i></span>-->
 <!--                <span>Penyedia</span>-->
 <!--            </a>-->
 <!--            <ul class="submenu">-->
@@ -55,13 +97,13 @@
         <!-- Instansi -->
         <li class="sidebar-item" id="menu-instansi">
             <a href="/instansi/terdaftar" class="sidebar-link">
-                <i class="fa-solid fa-building"></i>
+                <span class="icon-wrap"><i class="fa-solid fa-building"></i></span>
                 <span>Instansi</span>
             </a>
         </li>
         <!-- <li class="sidebar-item has-sub" id="menu-instansi">
             <a href="#" class='sidebar-link'>
-                <i class="bi bi-building"></i>
+                <span class="icon-wrap"><i class="bi bi-building"></i></span>
                 <span>Instansi</span>
             </a>
             <ul class="submenu">
@@ -77,7 +119,7 @@
         -->
         <li class="sidebar-item has-sub" id="menu-pokja">
             <a href="#" class='sidebar-link'>
-                <i class="fa-solid fa-list-check"></i>
+                <span class="icon-wrap"><i class="fa-solid fa-list-check"></i></span>
                 <span>Pokja</span>
             </a>
             <ul class="submenu">
@@ -94,14 +136,14 @@
         <!-- Pokja
         <li class="sidebar-item" id="menu-pokja">
             <a href="/pokja/terdaftar" class="sidebar-link">
-                <i class="fa-solid fa-list-check"></i>
+                <span class="icon-wrap"><i class="fa-solid fa-list-check"></i></span>
                 <span>Pokja Status</span>
             </a>
         </li> -->
         <!-- Credits -->
         <li class="sidebar-item" id="menu-credits">
             <a href="/credits" class="sidebar-link">
-                <i class="fa-solid fa-medal"></i>
+                <span class="icon-wrap"><i class="fa-solid fa-medal"></i></span>
                 <span>Tentang</span>
             </a>
         </li>
@@ -133,8 +175,15 @@
             $("#menu-provider").even().addClass("active")
             $("#submenu-provider-2").even().addClass("active")
             break
+        case "/pokja/registrasi":
+            $("#menu-pokja").even().addClass("active")
+            $("#menu-pokja .submenu").even().addClass("active")
+            $("#submenu-pokja-1").even().addClass("active")
+            break
         case "/pokja/terdaftar":
             $("#menu-pokja").even().addClass("active")
+            $("#menu-pokja .submenu").even().addClass("active")
+            $("#submenu-pokja-2").even().addClass("active")
             break
         case "/credits":
             $("#menu-credits").even().addClass("active")
