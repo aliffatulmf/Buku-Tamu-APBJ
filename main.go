@@ -27,7 +27,7 @@ var (
 
 const (
 	AppName = "Buku Tamu"
-	Version = "2.1"
+	Version = "2.2"
 	Port    = "6170"
 )
 
