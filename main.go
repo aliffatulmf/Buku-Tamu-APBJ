@@ -16,8 +16,6 @@ import (
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/io"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/service"
-	"github.com/google/uuid"
-
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -29,6 +27,7 @@ const (
 	Port    = "6170"
 
 	defaultImagePath = "media/images"
+	defaultDBName    = "bukutamu.db"
 
 	envKeyDebug = "BUKUTAMU_DEBUG"
 )
@@ -53,7 +52,7 @@ func initGin() *gin.Engine {
 }
 
 func initDB() *gorm.DB {
-	return database.NewConnection(&gorm.Config{Logger: logger.Default})
+	return database.NewConnection(defaultDBName, &gorm.Config{Logger: logger.Default})
 }
 
 func initDirs() {
@@ -95,19 +94,23 @@ func main() {
 	tmpl := template.Must(template.New("templates").Funcs(funcMap).ParseFS(subTmplFS, tmplFiles...))
 	r.SetHTMLTemplate(tmpl)
 	r.Static("/media", "media/")
-	r.SetTrustedProxies(nil)
-
-	if !isClientIdValid() {
-		db.AutoMigrate(
-			&entity.Destination{},
-			&entity.Consultation{},
-			&entity.Pokja{},
-			&entity.Agency{},
-			&entity.Pemda{},
-			&entity.Provider{},
-		)
-		database.Seed(db)
+	err = r.SetTrustedProxies(nil)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	err = db.AutoMigrate(
+		&entity.Destination{},
+		&entity.Consultation{},
+		&entity.Pokja{},
+		&entity.Agency{},
+		&entity.Pemda{},
+		&entity.Provider{},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	database.Seed(db)
 
 	wire(r, db)
 
@@ -190,28 +193,4 @@ func wire(r *gin.Engine, db *gorm.DB) {
 	r.GET("/user", func(ctx *gin.Context) {
 		ctx.HTML(200, "user-dashboard.html", gin.H{})
 	})
-}
-
-func isClientIdValid() bool {
-	const clientIdFile = ".client"
-
-	data, err := os.ReadFile(clientIdFile)
-	if err != nil {
-		if os.IsNotExist(err) {
-			if err := os.WriteFile(clientIdFile, []byte(uuid.NewString()), 0644); err != nil {
-				fmt.Printf("FATAL: cannot create %s: %s\n", clientIdFile, err.Error())
-				os.Exit(1)
-			}
-			return true
-		}
-		fmt.Printf("FATAL: cannot read %s: %s\n", clientIdFile, err.Error())
-		os.Exit(1)
-	}
-
-	if _, err := uuid.Parse(strings.TrimSpace(string(data))); err != nil {
-		fmt.Printf("FATAL: invalid client ID in %s\n", clientIdFile)
-		os.Exit(1)
-	}
-
-	return true
 }

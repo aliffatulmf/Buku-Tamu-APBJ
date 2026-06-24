@@ -11,7 +11,7 @@ import (
 )
 
 type PenyediaService struct {
-	Repository  *repository.PenyediaRepository
+	Repository   *repository.PenyediaRepository
 	ImageStorage *io.ImageStorage
 }
 
@@ -54,7 +54,7 @@ func (penyedia PenyediaService) Create(req request.PenyediaRequest) error {
 	}
 
 	if err != nil {
-		return errors.New("ERROR: cannot create record.")
+		return errors.New("error: cannot create record")
 	}
 
 	return nil

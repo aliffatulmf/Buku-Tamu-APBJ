@@ -8,8 +8,8 @@ import (
 )
 
 // default connection
-func NewConnection(config *gorm.Config) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("bukutamu.db"), config)
+func NewConnection(name string, config *gorm.Config) *gorm.DB {
+	db, err := gorm.Open(sqlite.Open(name), config)
 	if err != nil {
 		os.Exit(1)
 	}
