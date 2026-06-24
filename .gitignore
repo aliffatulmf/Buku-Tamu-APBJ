@@ -1,0 +1,9 @@
+.cocoindex_code/
+.mimocode/
+.agents/
+
+build/
+
+AGENTS.md
+mimocode.jsonc
+skills-lock.json

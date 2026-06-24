@@ -9,71 +9,54 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="/assets/vendors/toastify/toastify.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/vendors/iconly/bold.css">
-    <link rel="stylesheet" type="text/css" href="/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
-    <link rel="stylesheet" type="text/css" href="/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/app.css">
-    <link rel="stylesheet" type="text/css" href="/assets/fontawesome/css/all.min.css">
-    <style>
-        .main-navbar .menu-link span {
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-        }
-    </style>
 </head>
 
 <body>
     <div id="app">
         <div id="main" class="layout-horizontal">
             <header class="mb-5">
-                <div class="header-top">
-                    <div class="container">
-                        <div class="logo text-start">
-                            <h1 style="font-family: 'Inter', sans-serif;">Buku Tamu</h1>
-                        </div>
-                    </div>
-                </div>
                 <nav class="main-navbar">
                     <div class="container">
                         <ul>
                             <li class="menu-item">
                                 <a href="/" class="menu-link">
                                     <i class="fa-solid fa-house"></i>
-                                    <span>Dashboard</span>
+                                    <span class="span-text text-uppercase">beranda</span>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="/pemda/terdaftar" class="menu-link">
                                     <i class="fa-solid fa-building-user"></i>
-                                    <span>Pemda</span>
+                                    <span class="span-text text-uppercase">pemda</span>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="/penyedia/terdaftar" class="menu-link">
                                     <i class="fa-solid fa-building-user"></i>
-                                    <span>Penyedia</span>
+                                    <span class="span-text text-uppercase">penyedia</span>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="/instansi/terdaftar" class="menu-link">
                                     <i class="fa-solid fa-building"></i>
-                                    <span>Instansi</span>
+                                    <span class="span-text text-uppercase">instansi</span>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="/pokja/terdaftar" class="menu-link">
                                     <i class="fa-solid fa-list-check"></i>
-                                    <span>Pokja Status</span>
+                                    <span class="span-text text-uppercase">pokja</span>
                                 </a>
                             </li>
                             <li class="menu-item">
                                 <a href="/credits" class="menu-link">
                                     <i class="fa-solid fa-medal"></i>
-                                    <span>Tentang</span>
+                                    <span class="span-text text-uppercase">tentang</span>
                                 </a>
                             </li>
                         </ul>
@@ -174,11 +157,13 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <label class="form-label">From <sup class="text-danger"><i>wajib</i></sup></label>
+                                                <label class="form-label">From <sup
+                                                        class="text-danger"><i>wajib</i></sup></label>
                                                 <input type="date" class="form-control" name="from" id="from">
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <label class="form-label">To <sup class="text-danger"><i>wajib</i></sup></label>
+                                                <label class="form-label">To <sup
+                                                        class="text-danger"><i>wajib</i></sup></label>
                                                 <input type="date" class="form-control" name="to" id="to">
                                             </div>
                                         </div>
@@ -195,11 +180,13 @@
         </div>
     </div>
 
-    <script src="/assets/js/jquery.min.js"></script>
-    <script src="/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/vendors/toastify/toastify.js"></script>
-    <script src="/assets/fontawesome/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js"
+        integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha256-5P1JGBOIxI7FBAvT/mb1fCnI5n/NhQKzNUuW7Hq0fMc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/js/all.min.js"
+        integrity="sha256-KIvD/OMxkCLYz1tU9IH4cPio8Qidomavw3W3ZGwNrpQ=" crossorigin="anonymous"></script>
     <script>
         $("button#export").click(function () {
             var tabel = $("#tabel").val()
