@@ -10,20 +10,20 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-type excelExporter struct {
+type ExcelExporter struct {
 	pemdaDir    string
 	penyediaDir string
 }
 
-func NewExcelExporter() *excelExporter {
+func NewExcelExporter() *ExcelExporter {
 	wd, _ := os.Getwd()
-	return &excelExporter{
+	return &ExcelExporter{
 		pemdaDir:    filepath.Join(wd, "Documents", "Pemda"),
 		penyediaDir: filepath.Join(wd, "Documents", "Penyedia"),
 	}
 }
 
-func (e *excelExporter) ExportPemda(records []entity.TypePemdaAgency) error {
+func (e *ExcelExporter) ExportPemda(records []entity.TypePemdaAgency) error {
 	f := excelize.NewFile()
 	sheet := "Sheet1"
 	index := f.NewSheet(sheet)
@@ -56,7 +56,7 @@ func (e *excelExporter) ExportPemda(records []entity.TypePemdaAgency) error {
 	return f.SaveAs(filepath.Join(e.pemdaDir, name))
 }
 
-func (e *excelExporter) ExportPenyedia(records []entity.Provider) error {
+func (e *ExcelExporter) ExportPenyedia(records []entity.Provider) error {
 	f := excelize.NewFile()
 	sheet := "Sheet1"
 	index := f.NewSheet(sheet)

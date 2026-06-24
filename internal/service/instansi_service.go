@@ -2,14 +2,15 @@ package service
 
 import (
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"
 )
 
 type InstansiService struct {
-	Repository entity.InstansiRepository
+	Repository *repository.InstansiRepository
 }
 
-func NewAgencyService(repository entity.InstansiRepository) InstansiService {
+func NewAgencyService(repository *repository.InstansiRepository) InstansiService {
 	return InstansiService{Repository: repository}
 }
 

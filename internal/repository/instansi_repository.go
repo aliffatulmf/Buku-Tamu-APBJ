@@ -9,31 +9,26 @@ import (
 	"gorm.io/gorm"
 )
 
-type instansiRepository struct {
+type InstansiRepository struct {
 	DB *gorm.DB
 }
 
-func NewAgencyRepository(db *gorm.DB) *instansiRepository {
-	return &instansiRepository{DB: db}
+func NewAgencyRepository(db *gorm.DB) *InstansiRepository {
+	return &InstansiRepository{DB: db}
 }
 
-func (instansi *instansiRepository) New() *gorm.DB {
+func (instansi *InstansiRepository) New() *gorm.DB {
 	tx := instansi.DB.Model(entity.Agency{})
 	return tx.Session(&gorm.Session{
 		QueryFields: true,
 	})
 }
 
-func (instansi *instansiRepository) Create(model *entity.Agency) error {
-	return instansi.New().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(model).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+func (instansi *InstansiRepository) Create(model *entity.Agency) error {
+	return instansi.New().Create(model).Error
 }
 
-func (instansi *instansiRepository) Find(model *[]entity.Agency) error {
+func (instansi *InstansiRepository) Find(model *[]entity.Agency) error {
 	tx := instansi.New()
 	if err := tx.Find(model).Error; err != nil {
 		return err
@@ -42,7 +37,7 @@ func (instansi *instansiRepository) Find(model *[]entity.Agency) error {
 	return nil
 }
 
-func (instansi *instansiRepository) FindBy(model *entity.Agency, conds ...interface{}) error {
+func (instansi *InstansiRepository) FindBy(model *entity.Agency, conds ...interface{}) error {
 	tx := instansi.New()
 	if err := tx.First(model, conds...).Error; err != nil {
 		return err
@@ -51,27 +46,15 @@ func (instansi *instansiRepository) FindBy(model *entity.Agency, conds ...interf
 	return nil
 }
 
-func (instansi *instansiRepository) Update(model *entity.Agency, conds ...interface{}) error {
-	return instansi.New().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Where(conds).Updates(model).Error; err != nil {
-			return err
-		}
-
-		return nil
-	})
+func (instansi *InstansiRepository) Update(model *entity.Agency, conds ...interface{}) error {
+	return instansi.New().Where(conds).Updates(model).Error
 }
 
-func (instansi *instansiRepository) DeleteBy(conds ...interface{}) error {
-	return instansi.New().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Delete(entity.Agency{}, conds...).Error; err != nil {
-			return err
-		}
-
-		return nil
-	})
+func (instansi *InstansiRepository) DeleteBy(conds ...interface{}) error {
+	return instansi.New().Delete(entity.Agency{}, conds...).Error
 }
 
-func (instansi *instansiRepository) Count() int64 {
+func (instansi *InstansiRepository) Count() int64 {
 	var col int64
 
 	tx := instansi.New()
@@ -79,7 +62,7 @@ func (instansi *instansiRepository) Count() int64 {
 	return col
 }
 
-func (instansi *instansiRepository) FindWithFilter(sbn string, from, to time.Time) ([]entity.Agency, error) {
+func (instansi *InstansiRepository) FindWithFilter(sbn string, from, to time.Time) ([]entity.Agency, error) {
 	var model []entity.Agency
 	tx := instansi.New()
 

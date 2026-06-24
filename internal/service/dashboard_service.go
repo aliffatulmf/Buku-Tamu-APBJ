@@ -5,15 +5,17 @@ import (
 	"time"
 
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/io"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"
 )
 
 type DashboardService struct {
-	Pemda    entity.PemdaRepository
-	Provider entity.PenyediaRepository
-	Pokja    entity.PokjaRepository
-	Instansi entity.InstansiRepository
-	Exporter DataExporter
+	Pemda    *repository.PemdaRepository
+	Provider *repository.PenyediaRepository
+	Pokja    *repository.PokjaRepository
+	Instansi *repository.InstansiRepository
+	Exporter *io.ExcelExporter
 }
 
 type DType string
@@ -22,11 +24,11 @@ var PemdaType DType = "Pemda"
 var PenyediaType DType = "Penyedia"
 
 func NewDashboardServices(
-	pemda entity.PemdaRepository,
-	provider entity.PenyediaRepository,
-	pokja entity.PokjaRepository,
-	instansi entity.InstansiRepository,
-	exporter DataExporter,
+	pemda *repository.PemdaRepository,
+	provider *repository.PenyediaRepository,
+	pokja *repository.PokjaRepository,
+	instansi *repository.InstansiRepository,
+	exporter *io.ExcelExporter,
 ) DashboardService {
 	return DashboardService{
 		Pemda:    pemda,

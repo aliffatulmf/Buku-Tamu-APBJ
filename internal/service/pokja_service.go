@@ -2,14 +2,15 @@ package service
 
 import (
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"
 )
 
 type PokjaService struct {
-	Repository entity.PokjaRepository
+	Repository *repository.PokjaRepository
 }
 
-func NewPokjaService(repository entity.PokjaRepository) PokjaService {
+func NewPokjaService(repository *repository.PokjaRepository) PokjaService {
 	return PokjaService{Repository: repository}
 }
 

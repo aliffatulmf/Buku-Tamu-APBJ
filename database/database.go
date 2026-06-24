@@ -9,7 +9,7 @@ import (
 
 // default connection
 func NewConnection(config *gorm.Config) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("good.db"), config)
+	db, err := gorm.Open(sqlite.Open("bukutamu.db"), config)
 	if err != nil {
 		os.Exit(1)
 	}

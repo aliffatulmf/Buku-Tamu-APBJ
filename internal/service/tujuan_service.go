@@ -2,13 +2,14 @@ package service
 
 import (
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 )
 
 type TujuanService struct {
-	Repository entity.TujuanRepository
+	Repository *repository.TujuanRepository
 }
 
-func NewTujuanService(repository entity.TujuanRepository) TujuanService {
+func NewTujuanService(repository *repository.TujuanRepository) TujuanService {
 	return TujuanService{Repository: repository}
 }
 

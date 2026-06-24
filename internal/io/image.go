@@ -17,15 +17,15 @@ var (
 	ErrInvalidFormat     = errors.New("invalid image data format")
 )
 
-type imageStorage struct {
+type ImageStorage struct {
 	dir string
 }
 
-func NewImageStorage(dir string) *imageStorage {
-	return &imageStorage{dir: dir}
+func NewImageStorage(dir string) *ImageStorage {
+	return &ImageStorage{dir: dir}
 }
 
-func (s *imageStorage) Save(base64Data string) (string, error) {
+func (s *ImageStorage) Save(base64Data string) (string, error) {
 	parts := strings.Split(base64Data, ",")
 	if len(parts) != 2 {
 		return "", ErrInvalidFormat

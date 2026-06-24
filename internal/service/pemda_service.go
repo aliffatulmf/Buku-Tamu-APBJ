@@ -4,19 +4,21 @@ import (
 	"strings"
 
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/io"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"
 )
 
 type PemdaService struct {
-	Repository   entity.PemdaRepository
-	Instansi     entity.InstansiRepository
-	ImageStorage ImageStorage
+	Repository   *repository.PemdaRepository
+	Instansi     *repository.InstansiRepository
+	ImageStorage *io.ImageStorage
 }
 
 func NewPemdaService(
-	repository entity.PemdaRepository,
-	instansi entity.InstansiRepository,
-	imageStorage ImageStorage,
+	repository *repository.PemdaRepository,
+	instansi *repository.InstansiRepository,
+	imageStorage *io.ImageStorage,
 ) PemdaService {
 	return PemdaService{
 		Repository:   repository,

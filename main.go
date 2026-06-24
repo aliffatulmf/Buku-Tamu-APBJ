@@ -1,14 +1,12 @@
 package main
 
 import (
-	"embed"
 	"errors"
 	"fmt"
 	"html/template"
-	"net/http"
 	"os"
+	"strings"
 
-	"github.com/aliffatulmf/buku-tamu-apbj/app"
 	"github.com/aliffatulmf/buku-tamu-apbj/database"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/handler"
@@ -21,19 +19,13 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-//go:embed assets/*
-var a embed.FS
-
-//go:embed templates/*
-var f embed.FS
-
 var (
 	StatusMode string
 	Server     *gin.Engine
 	DB         *gorm.DB
 )
 
-var (
+const (
 	AppName = "Buku Tamu"
 	Version = "2.1"
 	Port    = "6170"
@@ -63,19 +55,13 @@ func init() {
 
 	switch StatusMode {
 	case gin.ReleaseMode:
-		tmpl := template.Must(
-			template.New("").Funcs(template.FuncMap{
-				"increment": func(x int) int {
-					return x + 1
-				},
-			}).ParseFS(f, "templates/**/*.html"),
-		)
-
-		Server.SetHTMLTemplate(tmpl)
-		Server.GET("/assets/*filepath", func(ctx *gin.Context) {
-			staticServer := http.FileServer(http.FS(a))
-			staticServer.ServeHTTP(ctx.Writer, ctx.Request)
+		Server.SetFuncMap(template.FuncMap{
+			"increment": func(x int) int {
+				return x + 1
+			},
 		})
+		Server.LoadHTMLGlob("templates/**/*.html")
+		Server.Static("/assets", "assets/")
 
 		DB = database.NewConnection(&gorm.Config{
 			Logger: logger.Default,
@@ -115,7 +101,7 @@ func init() {
 	Server.SetTrustedProxies(nil)
 }
 
-func Handler(app *app.App) {
+func Handler() {
 	var (
 		PemdaRepository    = repository.NewPemdaRepository(DB)
 		PenyediaRepository = repository.NewPenyediaRepository(DB)
@@ -151,13 +137,13 @@ func Handler(app *app.App) {
 
 	// Dashboard
 	{
-		app.Server.GET("/", DashbordHandler.DashbordIndex)
-		app.Server.GET("/export", DashbordHandler.DashboardExport)
+		Server.GET("/", DashbordHandler.DashbordIndex)
+		Server.GET("/export", DashbordHandler.DashboardExport)
 	}
 
 	// Instansi
 	{
-		instansi := app.Server.Group("/instansi")
+		instansi := Server.Group("/instansi")
 		instansi.GET("/registrasi", InstansiHandler.InstansiIndex)
 		instansi.GET("/terdaftar", InstansiHandler.InstansiFind)
 		instansi.GET("/terdaftar/:id", InstansiHandler.InstansiDetail)
@@ -167,7 +153,7 @@ func Handler(app *app.App) {
 
 	// Penyedia
 	{
-		penyedia := app.Server.Group("/penyedia")
+		penyedia := Server.Group("/penyedia")
 		penyedia.GET("/registrasi", PenyediaHandler.PenyediaIndex)
 		penyedia.GET("/terdaftar", PenyediaHandler.PenyediaList)
 		penyedia.GET("/terdaftar/:id", PenyediaHandler.PenyediaDetail)
@@ -178,7 +164,7 @@ func Handler(app *app.App) {
 
 	// Pokja
 	{
-		pokja := app.Server.Group("/pokja")
+		pokja := Server.Group("/pokja")
 		pokja.GET("/registrasi", PokjaHandler.PokjaIndex)
 		pokja.GET("/terdaftar", PokjaHandler.PokjaList)
 		pokja.GET("/terdaftar/:id", PokjaHandler.PokjaDetail)
@@ -189,7 +175,7 @@ func Handler(app *app.App) {
 
 	// Pemda
 	{
-		pemda := app.Server.Group("/pemda")
+		pemda := Server.Group("/pemda")
 		pemda.GET("/registrasi", PemdaHandler.PemdaIndex)
 		pemda.GET("/terdaftar", PemdaHandler.PemdaList)
 		pemda.GET("/terdaftar/:id", PemdaHandler.PemdaDetail)
@@ -199,7 +185,7 @@ func Handler(app *app.App) {
 	}
 
 	{
-		app.Server.GET("/credits", func(ctx *gin.Context) {
+		Server.GET("/credits", func(ctx *gin.Context) {
 			ctx.HTML(200, "credits.html", gin.H{
 				"info": gin.H{
 					"appname": AppName,
@@ -208,15 +194,21 @@ func Handler(app *app.App) {
 				},
 			})
 		})
-		app.Server.GET("/user", func(ctx *gin.Context) {
+		Server.GET("/user", func(ctx *gin.Context) {
 			ctx.HTML(200, "user-dashboard.html", gin.H{})
 		})
 	}
 }
 
 func main() {
-	app := app.New(Server)
-	app.SetHandler(Handler)
-	app.SetPort(Port)
-	app.RunHTTP()
+	Handler()
+
+	port := Port
+	if !strings.Contains(port, ":") {
+		port = fmt.Sprintf(":%s", port)
+	}
+
+	if err := Server.Run(port); err != nil {
+		fmt.Println("FATAL:", err.Error())
+	}
 }

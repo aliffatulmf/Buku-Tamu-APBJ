@@ -9,15 +9,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type pemdaRepository struct {
+type PemdaRepository struct {
 	DB *gorm.DB
 }
 
-func NewPemdaRepository(db *gorm.DB) *pemdaRepository {
-	return &pemdaRepository{DB: db}
+func NewPemdaRepository(db *gorm.DB) *PemdaRepository {
+	return &PemdaRepository{DB: db}
 }
 
-func (pemda *pemdaRepository) New() *gorm.DB {
+func (pemda *PemdaRepository) New() *gorm.DB {
 	tx := pemda.DB.Table("pemdas")
 	tx.Joins("inner join agencies on agencies.id = pemdas.agency_id")
 	tx.Where("pemdas.deleted_at is null")
@@ -25,11 +25,11 @@ func (pemda *pemdaRepository) New() *gorm.DB {
 	return tx
 }
 
-func (pemda *pemdaRepository) Find() *gorm.DB {
+func (pemda *PemdaRepository) Find() *gorm.DB {
 	return pemda.New().Limit(100)
 }
 
-func (pemda *pemdaRepository) FindOne(model *entity.TypePemdaAgency) error {
+func (pemda *PemdaRepository) FindOne(model *entity.TypePemdaAgency) error {
 	tx := pemda.New()
 	tx.Scan(model)
 
@@ -39,36 +39,20 @@ func (pemda *pemdaRepository) FindOne(model *entity.TypePemdaAgency) error {
 	return nil
 }
 
-func (pemda *pemdaRepository) Create(model *entity.Pemda) error {
-	return pemda.New().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(model).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+func (pemda *PemdaRepository) Create(model *entity.Pemda) error {
+	return pemda.New().Create(model).Error
 }
 
-func (pemda *pemdaRepository) Delete(id uint) error {
-	return pemda.New().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Delete(entity.Pemda{}, id).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+func (pemda *PemdaRepository) Delete(id uint) error {
+	return pemda.New().Delete(entity.Pemda{}, id).Error
 }
 
-func (pemda *pemdaRepository) UpdatePermission(id uint) error {
+func (pemda *PemdaRepository) UpdatePermission(id uint) error {
 	var model entity.Pemda
-
-	return pemda.New().Transaction(func(tx *gorm.DB) error {
-		if err := tx.First(&model, id).Updates(entity.Pemda{Verified: true}).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+	return pemda.New().First(&model, id).Updates(entity.Pemda{Verified: true}).Error
 }
 
-func (pemda *pemdaRepository) Count() int64 {
+func (pemda *PemdaRepository) Count() int64 {
 	var t int64
 
 	tx := pemda.New()
@@ -77,7 +61,7 @@ func (pemda *pemdaRepository) Count() int64 {
 	return t
 }
 
-func (pemda *pemdaRepository) FindByID(id uint) (entity.TypePemdaAgency, error) {
+func (pemda *PemdaRepository) FindByID(id uint) (entity.TypePemdaAgency, error) {
 	var model entity.TypePemdaAgency
 	tx := pemda.New()
 	if err := tx.Where("pemdas.id = ?", id).Scan(&model).Error; err != nil {
@@ -89,13 +73,11 @@ func (pemda *pemdaRepository) FindByID(id uint) (entity.TypePemdaAgency, error) 
 	return model, nil
 }
 
-func (pemda *pemdaRepository) CreateWithOmit(model *entity.Pemda, omit ...string) error {
-	return pemda.New().Transaction(func(tx *gorm.DB) error {
-		return tx.Omit(omit...).Create(model).Error
-	})
+func (pemda *PemdaRepository) CreateWithOmit(model *entity.Pemda, omit ...string) error {
+	return pemda.New().Omit(omit...).Create(model).Error
 }
 
-func (pemda *pemdaRepository) FindByDateRange(start, end time.Time) ([]entity.TypePemdaAgency, error) {
+func (pemda *PemdaRepository) FindByDateRange(start, end time.Time) ([]entity.TypePemdaAgency, error) {
 	var model []entity.TypePemdaAgency
 	tx := pemda.New()
 	if !start.IsZero() && !end.IsZero() {
@@ -107,7 +89,7 @@ func (pemda *pemdaRepository) FindByDateRange(start, end time.Time) ([]entity.Ty
 	return model, nil
 }
 
-func (pemda *pemdaRepository) FindWithFilter(sbn string, from, to time.Time, permission string) ([]entity.TypePemdaAgency, error) {
+func (pemda *PemdaRepository) FindWithFilter(sbn string, from, to time.Time, permission string) ([]entity.TypePemdaAgency, error) {
 	var model []entity.TypePemdaAgency
 	tx := pemda.New()
 	tx.Order("updated_at desc")

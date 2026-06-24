@@ -9,15 +9,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type penyediaRepository struct {
+type PenyediaRepository struct {
 	DB *gorm.DB
 }
 
-func NewPenyediaRepository(db *gorm.DB) *penyediaRepository {
-	return &penyediaRepository{DB: db}
+func NewPenyediaRepository(db *gorm.DB) *PenyediaRepository {
+	return &PenyediaRepository{DB: db}
 }
 
-func (penyedia *penyediaRepository) New() *gorm.DB {
+func (penyedia *PenyediaRepository) New() *gorm.DB {
 	tx := penyedia.DB.Model(entity.Provider{})
 	tx.Session(&gorm.Session{
 		QueryFields: true,
@@ -26,14 +26,14 @@ func (penyedia *penyediaRepository) New() *gorm.DB {
 	return tx
 }
 
-func (penyedia *penyediaRepository) Find() *gorm.DB {
+func (penyedia *PenyediaRepository) Find() *gorm.DB {
 	tx := penyedia.New()
 	tx.Limit(100)
 
 	return tx
 }
 
-func (penyedia *penyediaRepository) FindByID(model *entity.Provider, id uint) error {
+func (penyedia *PenyediaRepository) FindByID(model *entity.Provider, id uint) error {
 	tx := penyedia.New()
 	tx.First(model, "id = ?", id)
 
@@ -43,38 +43,26 @@ func (penyedia *penyediaRepository) FindByID(model *entity.Provider, id uint) er
 	return nil
 }
 
-func (penyedia *penyediaRepository) Create(model *entity.Provider) error {
-	return penyedia.New().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(model).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+func (penyedia *PenyediaRepository) Create(model *entity.Provider) error {
+	return penyedia.New().Create(model).Error
 }
 
-func (penyedia *penyediaRepository) Delete(model *entity.Provider, conds ...interface{}) error {
-	return penyedia.New().Transaction(func(tx *gorm.DB) error {
-		if err := tx.Delete(model, conds).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+func (penyedia *PenyediaRepository) Delete(model *entity.Provider, conds ...interface{}) error {
+	return penyedia.New().Delete(model, conds...).Error
 }
 
-func (penyedia *penyediaRepository) UpdatePermission(id uint) error {
-	return penyedia.New().Transaction(func(tx *gorm.DB) error {
-		result := tx.Where("id = ?", id).Update("verified", true)
-		if result.Error != nil {
-			return result.Error
-		}
-		if result.RowsAffected == 0 {
-			return gorm.ErrRecordNotFound
-		}
-		return nil
-	})
+func (penyedia *PenyediaRepository) UpdatePermission(id uint) error {
+	result := penyedia.New().Where("id = ?", id).Update("verified", true)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
 }
 
-func (penyedia *penyediaRepository) Count() int64 {
+func (penyedia *PenyediaRepository) Count() int64 {
 	var col int64
 
 	tx := penyedia.New()
@@ -82,13 +70,11 @@ func (penyedia *penyediaRepository) Count() int64 {
 	return col
 }
 
-func (penyedia *penyediaRepository) CreateWithOmit(model *entity.Provider, omit ...string) error {
-	return penyedia.New().Transaction(func(tx *gorm.DB) error {
-		return tx.Omit(omit...).Create(model).Error
-	})
+func (penyedia *PenyediaRepository) CreateWithOmit(model *entity.Provider, omit ...string) error {
+	return penyedia.New().Omit(omit...).Create(model).Error
 }
 
-func (penyedia *penyediaRepository) FindByDateRange(start, end time.Time) ([]entity.Provider, error) {
+func (penyedia *PenyediaRepository) FindByDateRange(start, end time.Time) ([]entity.Provider, error) {
 	var model []entity.Provider
 	tx := penyedia.New()
 	if !start.IsZero() && !end.IsZero() {
@@ -100,7 +86,7 @@ func (penyedia *penyediaRepository) FindByDateRange(start, end time.Time) ([]ent
 	return model, nil
 }
 
-func (penyedia *penyediaRepository) FindWithFilter(sbn string, from, to time.Time, permission string) ([]entity.Provider, error) {
+func (penyedia *PenyediaRepository) FindWithFilter(sbn string, from, to time.Time, permission string) ([]entity.Provider, error) {
 	var model []entity.Provider
 	tx := penyedia.New()
 	tx.Order("updated_at desc")

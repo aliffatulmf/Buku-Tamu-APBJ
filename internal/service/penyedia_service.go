@@ -5,17 +5,19 @@ import (
 	"strings"
 
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/io"
+	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"
 )
 
 type PenyediaService struct {
-	Repository  entity.PenyediaRepository
-	ImageStorage ImageStorage
+	Repository  *repository.PenyediaRepository
+	ImageStorage *io.ImageStorage
 }
 
 func NewProviderService(
-	repository entity.PenyediaRepository,
-	imageStorage ImageStorage,
+	repository *repository.PenyediaRepository,
+	imageStorage *io.ImageStorage,
 ) PenyediaService {
 	return PenyediaService{
 		Repository:   repository,
