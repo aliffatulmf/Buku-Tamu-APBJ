@@ -23,16 +23,6 @@ jobs:
             mingw_path: C:\mingw64\bin
             goarch: amd64
             output: buku-tamu-x64-gcc.exe
-          - arch: x32
-            compiler: msvc
-            msvc_arch: x86
-            goarch: 386
-            output: buku-tamu-x32-msvc.exe
-          - arch: x32
-            compiler: gcc
-            mingw_path: C:\mingw32\bin
-            goarch: 386
-            output: buku-tamu-x32-gcc.exe
 
     steps:
       - uses: actions/checkout@v7
@@ -76,6 +66,7 @@ jobs:
 
   release:
     needs: build
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v8
