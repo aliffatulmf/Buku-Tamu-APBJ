@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strings"
+
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/entity"
 	"github.com/aliffatulmf/buku-tamu-apbj/internal/repository"
 	"github.com/aliffatulmf/buku-tamu-apbj/request"
@@ -37,7 +39,9 @@ func (pokja PokjaService) UpdateStatus(req request.PokjaRequest) error {
 }
 
 func (pokja PokjaService) Create(req request.PokjaCreateRequest) error {
+	id := strings.ToLower(strings.ReplaceAll(req.Name, " ", "_"))
 	model := entity.Pokja{
+		ID:            id,
 		PokjaName:     req.Name,
 		Status:        true,
 		DestinationID: string(entity.DestinationPokja),
